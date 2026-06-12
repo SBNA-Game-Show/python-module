@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SB Dictionary Module</title>
+
+    <!-- Bootstrap 5 CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!---Heading-->
+    <div class="container mt-5">
+      <h3>Welcome to Samskrita Bharati's Dictionary Module</h3>
+      <hr />
+    </div>
+    <!-- Application Features -->
+
+    <div class="container mt-5">
+      <h3
+        class="text-primary"
+        style="cursor: pointer"
+        data-bs-toggle="collapse"
+        data-bs-target="#appFeatures"
+        aria-expanded="false"
+        aria-controls="appFeatures"
+      >
+        Application Features
+      </h3>
+
+      <div class="collapse mt-3" id="appFeatures">
+        <p>
+          The Sanskrit Dictionary Module is designed to support Sanskrit
+          learners, educators, and developers in exploring and analyzing
+          Sanskrit texts. The application can ingest content from various
+          sources, such as uploaded documents and web-based content. It
+          extracts, processes, and tokenizes both English and Sanskrit text,
+          generating linguistic metadata that is subsequently stored in MongoDB
+          for efficient retrieval, analysis, and educational use.
+        </p>
+
+        <p>
+          This application stores its data in the MongoDB database
+          <strong>WordComplex</strong>, within a dedicated collection also named
+          <strong>tokenized-stories</strong>. It supports flexible access to the
+          stored data through API requests. Please refer to the API
+          documentation for details on the available endpoints for developers.
+        </p>
+      </div>
+    </div>
+    <!--Data Sources-->
+    <div class="container mt-5">
+      <h3
+        class="text-primary"
+        style="cursor: pointer"
+        data-bs-toggle="collapse"
+        data-bs-target="#dataSource"
+        aria-expanded="false"
+        aria-controls="dataSource"
+      >
+        Data Sources :
+      </h3>
+      <div class="collapse mt-3" id="dataSource">
+        <ul class="list-group">
+          <!-- Web Based Content (Collapsible) -->
+          <li class="list-group-item">
+            <span
+              class="text-primary"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#webContent"
+              aria-expanded="false"
+              aria-controls="webContent"
+            >
+              Web Based Content
+            </span>
+
+            <div class="collapse mt-2" id="webContent">
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <a
+                    href="https://learnsanskrit.cc"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Learn Sanskrit.cc
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="list-group-item">Read PDF</li>
+          <li class="list-group-item">Read JSON</li>
+        </ul>
+      </div>
+    </div>
+
+    <!--API Documentation-->
+
+    <div class="container mt-5">
+      <h3
+        class="text-primary"
+        style="cursor: pointer"
+        data-bs-toggle="collapse"
+        data-bs-target="#apiDocs"
+        aria-expanded="false"
+        aria-controls="apiDocs"
+      >
+        API Documentation :
+      </h3>
+
+      <div class="collapse mt-3" id="apiDocs">
+        <ul class="list-group">
+          <li class="list-group-item">
+            Development:
+            <a href="http://localhost:5001/api-docs" target="_blank">
+              http://localhost:5001/api-docs
+            </a>
+          </li>
+
+          <li class="list-group-item">
+            Production:
+            <a href="{{ prod_url }}" target="_blank"> {{ prod_url }} </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!---Libraries Uses-->
+    <div class="container mt-5">
+      <h3
+        class="text-primary"
+        style="cursor: pointer"
+        data-bs-toggle="collapse"
+        data-bs-target="#librariesUsed"
+        aria-expanded="false"
+        aria-controls="librariesUsed"
+      >
+        Libraries Used :
+      </h3>
+
+      <div class="collapse mt-3" id="librariesUsed">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <span
+              class="text-primary fw-semibold"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#webContent"
+              aria-expanded="false"
+              aria-controls="webContent"
+            >
+              Web-Based Content Extraction:
+            </span>
+          </li>
+
+          <div class="collapse mt-2" id="webContent">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h6 class="fw-bold">Flask Requests</h6>
+                <p class="mb-0">
+                  Used to establish HTTP connections and retrieve content from
+                  external web resources. The library enables the application to
+                  send requests, receive responses, and collect raw data for
+                  further processing.
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <h6 class="fw-bold">Beautiful Soup</h6>
+                <p class="mb-0">
+                  Used for parsing and navigating HTML documents. It extracts
+                  relevant textual content, removes unnecessary markup, and
+                  structures the data for downstream linguistic analysis and
+                  tokenization.
+                </p>
+              </li>
+            </ul>
+          </div>
+          <li class="list-group-item">
+            <span
+              class="text-primary fw-semibold"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#engTokenize"
+              aria-expanded="false"
+              aria-controls="engTokenize"
+            >
+              Tokenizing English Passage:
+            </span>
+          </li>
+          <div class="collapse mt-2" id="engTokenize">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h6 class="fw-bold">Spacy</h6>
+                <p class="mb-0">
+                  This application leverages spaCy's
+                  <code>en_core_web_sm</code> language model to perform
+                  linguistic analysis on English passages. The complete passage
+                  is processed by the model, which identifies the part of speech
+                  (POS) for each token. The resulting tokens, along with their
+                  corresponding lemmas and POS tags, are then stored in a
+                  structured array for subsequent analysis, dictionary lookups,
+                  synonym and antonym retrieval, and other language processing
+                  tasks.
+                </p>
+              </li>
+            </ul>
+          </div>
+          <li class="list-group-item">
+            <span
+              class="text-primary fw-semibold"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#engSynonyms"
+              aria-expanded="false"
+              aria-controls="engSynonyms"
+            >
+              Adding Synonym and Antonyms to Tokenized English Words:
+            </span>
+          </li>
+          <div class="collapse mt-2" id="engSynonyms">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h6 class="fw-bold">NLTK WordNet</h6>
+                <p class="mb-0">
+                  This application leverages NLTK's WordNet lexical database to
+                  enrich tokenized English words with their corresponding
+                  synonyms and antonyms. Using the part-of-speech information
+                  generated during tokenization, the system performs targeted
+                  WordNet lookups to retrieve semantically relevant word
+                  relationships. The extracted lexical data is then stored
+                  alongside each token, enabling enhanced dictionary
+                  functionality, vocabulary exploration, and language-learning
+                  support.
+                </p>
+              </li>
+            </ul>
+          </div>
+          <li class="list-group-item">
+            <span
+              class="text-primary fw-semibold"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#sanTokenize"
+              aria-expanded="false"
+              aria-controls="sanTokenize"
+            >
+              Tokenizing Sanskrit Passage:
+            </span>
+          </li>
+          <div class="collapse mt-2" id="sanTokenize">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h6 class="fw-bold">Add Library Name Here</h6>
+                <p class="mb-0">Add description here.</p>
+              </li>
+            </ul>
+          </div>
+          <li class="list-group-item">
+            <span
+              class="text-primary fw-semibold"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#sanSynonym"
+              aria-expanded="false"
+              aria-controls="sanSynonym"
+            >
+              Adding Synonyms and Antonyms to Tokenized Sanskrit Words:
+            </span>
+          </li>
+          <div class="collapse mt-2" id="sanSynonym">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h6 class="fw-bold">Add Library Name Here</h6>
+                <p class="mb-0">Add description here.</p>
+              </li>
+            </ul>
+          </div>
+          <li class="list-group-item">
+            <span
+              class="text-primary fw-semibold"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#readPDF"
+              aria-expanded="false"
+              aria-controls="readPDF"
+            >
+              Reading PDF Documents:
+            </span>
+          </li>
+          <div class="collapse mt-2" id="readPDF">
+            <ul class="list-group">
+              <!-- English PDF -->
+              <li class="list-group-item">
+                <span
+                  class="text-primary"
+                  style="cursor: pointer"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#readEnglishPDF"
+                  aria-expanded="false"
+                  aria-controls="readEnglishPDF"
+                >
+                  English PDF Extraction
+                </span>
+              </li>
+
+              <div class="collapse mt-2" id="readEnglishPDF">
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <h6 class="fw-bold">PyMuPDF</h6>
+                    <p class="mb-0">
+                      PyMuPDF is used to extract embedded text directly from PDF
+                      documents. The library parses document pages, retrieves
+                      textual content while preserving reading order, and
+                      prepares the extracted data for downstream tokenization,
+                      linguistic analysis, and database storage.
+                    </p>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Sanskrit PDF -->
+              <li class="list-group-item">
+                <span
+                  class="text-primary"
+                  style="cursor: pointer"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#readSanskritPDF"
+                  aria-expanded="false"
+                  aria-controls="readSanskritPDF"
+                >
+                  Sanskrit PDF Extraction
+                </span>
+              </li>
+
+              <div class="collapse mt-2" id="readSanskritPDF">
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <h6 class="fw-bold">PyMuPDF + Tesseract OCR (sanskrit)</h6>
+                    <p class="mb-0">
+                      As Sanskrit texts often contain complex Devanagari
+                      characters, ligatures, and font encodings that cannot
+                      always be extracted accurately using standard text-based
+                      PDF parsing techniques. To address this challenge, the
+                      application combines **PyMuPDF** and **Tesseract OCR
+                      (Sanskrit/Devanagari language model)** to perform
+                      image-based text extraction. PyMuPDF is used to identify
+                      and extract page regions or render PDF content as
+                      high-resolution images, while Tesseract OCR processes
+                      these images to recognize Devanagari characters and
+                      convert them into Unicode Sanskrit text. The extracted
+                      content is subsequently cleaned, normalized, and
+                      structured to ensure consistency before undergoing
+                      tokenization, lexical enrichment, and further linguistic
+                      analysis.
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </ul>
+          </div>
+          <li class="list-group-item">
+            <span
+              class="text-primary fw-semibold"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#readJSON"
+              aria-expanded="false"
+              aria-controls="readJSON"
+            >
+              Reading JSON:
+            </span>
+          </li>
+
+          <div class="collapse mt-2" id="readJSON">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h6 class="fw-bold">Python Built-in JSON/File Handling</h6>
+                <p class="mb-0">
+                  To parse the JSON document, the application uses Python’s
+                  built-in file system reader along with the JSON module to load
+                  and process the file. The extracted data is then prepared for
+                  downstream linguistic analysis and tokenization.
+                </p>
+              </li>
+            </ul>
+          </div>
+        </ul>
+      </div>
+    </div>
+
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
