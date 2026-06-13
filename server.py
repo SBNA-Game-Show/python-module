@@ -14,11 +14,9 @@ from routes.learnsanskrit_meta_data_routes import story_data_bp
 from routes.dictionary_routes import dictionary_bp
 
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
-app = Flask(__name__,template_folder="docs",static_url_path="/assets",
-    static_folder=os.path.join(BASE_DIR, "docs/assets"))
+app = Flask(__name__,template_folder="docs",)
 CORS(app)
 
 Swagger(app, config=SWAGGER_CONFIG, template=SWAGGER_TEMPLATE)
