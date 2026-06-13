@@ -17,19 +17,19 @@ from services.clean_tokenized_english_words_array import CleanEnglishTokenizedDa
 class FetchNewFable:
     """Orchestrates the pipeline to fetch, clean, tokenize, and save a fable."""
 
-    def __init__(self, file_name="tokenized_stories.json"):
-        self.file_name = file_name
+    def __init__(self, story_id):
+        self.story_id = story_id
 
-    def execute(self, story_id):
+    def execute(self):
         """Runs the complete execution pipeline for a given story ID."""
         
 
         
         # Fetching from DB
-        story_data = self._get_story_data_from_DB(story_id)
+        story_data = self._get_story_data_from_DB(self.story_id)
         
         if not story_data:
-            raise ValueError(f"No data found for the given ID: {story_id}")
+            raise ValueError(f"No data found for the given ID: {self.story_id}")
             
         vendor_id = story_data.get("vendorId")
         
@@ -45,7 +45,7 @@ class FetchNewFable:
         raw_data = self._retrieve_raw_data(vendor_id)
         cleaned_data = self._clean_data(raw_data)
         ## Adding the same request id for the story
-        cleaned_data["_id"] = story_id
+        cleaned_data["_id"] = self.story_id
         cleaned_data["category"] = story_category
         
         ## 3. Enrich / Tokenize
@@ -68,7 +68,7 @@ class FetchNewFable:
         
         # Updating Learn Sanskrit Metadata collection
         
-        updater = self._update_story_toDB(story_id)
+        updater = self._update_story_toDB(self.story_id)
         
         # Writes to the file system 
                 # 1. Fetch metadata
