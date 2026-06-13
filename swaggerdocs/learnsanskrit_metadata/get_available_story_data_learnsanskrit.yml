@@ -8,8 +8,8 @@ summary: Retrieve all available stories
 description: >
   Returns all available fables that are available to be taken from https://learnsanskrit.cc/
 
-security:
-  - Bearer: []
+# security:
+#   - Bearer: []
 
 responses:
   200:

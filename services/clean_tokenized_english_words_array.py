@@ -10,10 +10,11 @@ class CleanEnglishTokenizedData:
         
         tokenized_array = self._extract_tokenized_data(self.data)
         cleaned_version = self._remove_space_punctuation(tokenized_array)
-        final_version = self ._remove_empty_arrays(cleaned_version)
+        final_version = self._remove_empty_arrays(cleaned_version)
+        duplicate_removed = self._remove_duplicates(final_version)
         
         new_data = self.data.copy()
-        new_data["tokenized_english_version"] = final_version
+        new_data["tokenized_english_version"] = duplicate_removed
         
         return new_data
         
@@ -55,6 +56,25 @@ class CleanEnglishTokenizedData:
             cleaned_version_copy.append(cleaned_item)
             
         return cleaned_version_copy
+    
+    def _remove_duplicates(self,data):
+        seen = set()
+        result =[]
+        for item in data:
+            word = item.get("text")
+            if not word:
+                continue
+            
+            key = word.lower().strip()
+            
+            if key in seen:
+                continue
+            
+            seen.add(key)
+            result.append(item)
+            
+        return result
+        
             
             
         
