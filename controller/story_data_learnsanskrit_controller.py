@@ -35,8 +35,8 @@ def add_new_story():
             "message": "story_id query parameter is required"
         }), 400
 
-    service = FetchNewFable()
-    result = service.execute(story_id)
+    service = FetchNewFable(story_id)
+    result = service.execute()
 
     return jsonify({
         "data": result
