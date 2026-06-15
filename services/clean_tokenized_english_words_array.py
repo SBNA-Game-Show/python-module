@@ -12,9 +12,10 @@ class CleanEnglishTokenizedData:
         cleaned_version = self._remove_space_punctuation(tokenized_array)
         final_version = self._remove_empty_arrays(cleaned_version)
         duplicate_removed = self._remove_duplicates(final_version)
+        definition_cleaned = self._remove_empty_definitions(duplicate_removed)
         
         new_data = self.data.copy()
-        new_data["tokenized_english_version"] = duplicate_removed
+        new_data["tokenized_english_version"] = definition_cleaned
         
         return new_data
         
@@ -74,6 +75,20 @@ class CleanEnglishTokenizedData:
             result.append(item)
             
         return result
+    
+    def _remove_empty_definitions(self, data):
+        cleaned = []
+
+        for item in data:
+            new_item = item.copy()
+
+            if new_item.get("definition") is None:
+                new_item.pop("definition", None)
+
+            cleaned.append(new_item)
+
+        return cleaned
+            
         
             
             
