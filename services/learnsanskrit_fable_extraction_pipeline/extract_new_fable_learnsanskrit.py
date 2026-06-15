@@ -9,6 +9,7 @@ from services.learnsanskrit_fable_extraction_pipeline.convert_to_JSON import Ext
 from services.tokenize_english_passage import TokenizeEnglishVersion
 from services.tokenize_sanskrit_passage import TokenizeSanskritVersion
 from services.extract_english_synonym_antonym import ExtractEnglishSynonymAntonym
+from services.extract_definitions_english_words import ExtractDefinitions
 
 from repository.learnsanskrit_metadata_repo import WriteTokenizedStoryToMongoDB,UpdateLearnSanskritMetaData,GetMetaDataById
 from services.clean_tokenized_english_words_array import CleanEnglishTokenizedData
@@ -52,8 +53,11 @@ class FetchNewFable:
         tokenized_english = self._tokenize_english_version(cleaned_data)
         #Adding Synonyms and antonyms
         tokenized_english_with_grammer = self._add_synonym_antonym(tokenized_english)
+        definitions_added = self._add_definitions(tokenized_english_with_grammer)
+        
+        
         #Tokenizing Sanskrit words
-        tokenized_sanskrit_version = self._tokenize_sanskrit_version(tokenized_english_with_grammer)
+        tokenized_sanskrit_version = self._tokenize_sanskrit_version(definitions_added)
         # cleaning english words that does not have synonyms and antonyms
         final_version = self._clean_english_data(tokenized_sanskrit_version)
         
@@ -122,6 +126,11 @@ class FetchNewFable:
     
     def _clean_english_data(self,data):
         req = CleanEnglishTokenizedData(data)
+        return req.execute()
+    
+    
+    def _add_definitions(self,data):
+        req = ExtractDefinitions(data)
         return req.execute()
     
     ## Writing to file System for testing purposes only
