@@ -1,6 +1,6 @@
 
 from flask import jsonify,request
-from services.retrieve_all_story_data_learnsanskrit import RetrieveAllStoryDataLearnSanskrit
+from services.learnsanskrit_metadata_services import RetrieveAllStoryDataLearnSanskrit
 from services.learnsanskrit_fable_extraction_pipeline.extract_new_fable_learnsanskrit import FetchNewFable
 from services.learnsanskrit_metadata_extraction_pipeline.write_to_DB import WriteLearnSanskritCCMetaData
 

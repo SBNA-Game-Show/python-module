@@ -1,5 +1,4 @@
-from repository.file_system.get_all_story_data_learnsanskrit import GetAllStoryDataLearnSanskrit
-from repository.get_available_learnsanskrit_metadata import GetUnusedStories
+from repository.learnsanskrit_metadata_repo import GetUnusedStories
 
 class RetrieveAllStoryDataLearnSanskrit:
     
