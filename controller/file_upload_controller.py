@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 BASE_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "data")
 )
+
 print(BASE_PATH)
 
 
@@ -24,38 +25,56 @@ def process_uploaded_file():
             "message": "No file selected"
         }), 400
 
-    extension = Path(file.filename).suffix.lower()
-    mime_type = file.content_type
-    file_category = determine_file_category(extension)
-
-    # Create data directory if needed
-    os.makedirs(BASE_PATH, exist_ok=True)
-
-    # Sanitize filename
+    # sanitize filename first
     filename = secure_filename(file.filename)
 
-    # Full path
-    file_path = os.path.join(BASE_PATH, filename)
+    # extract extension safely
+    extension = Path(filename).suffix.lower()
+    mime_type = file.content_type
 
-    # Save uploaded file
+    file_category = _determine_file_category(extension)
+
+    os.makedirs(BASE_PATH, exist_ok=True)
+
+    file_path = os.path.join(BASE_PATH, filename)
     file.save(file_path)
+
+    service_result = _determine_service_execution(file_category, filename)
 
     return jsonify({
         "success": True,
         "filename": filename,
-        "saved_path": file_path,
-        "extension": extension,
+        "category": file_category,
         "mime_type": mime_type,
-        "category": file_category
+        "result": service_result
     }), 200
 
 
-def determine_file_category(extension):
+def _determine_service_execution(file_category, filename):
+    """
+    Route services using ONLY filename.
+    """
+
+    if file_category == "pdf":
+        return "PDF processed successfully"
+
+    if file_category == "image":
+        return "Image processed successfully"
+
+    if file_category == "document":
+        return "Text document processed successfully"
+
+    if file_category == "json":
+        return "JSON file processed successfully"
+
+    return "UNKNOWN FILE TYPE"
+
+
+def _determine_file_category(extension):
     pdf_extensions = {".pdf"}
     image_extensions = {".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"}
-    document_extensions = {".doc", ".docx", ".txt", ".rtf"}
-    spreadsheet_extensions = {".xls", ".xlsx", ".csv"}
-    presentation_extensions = {".ppt", ".pptx"}
+    document_extensions = {".txt", ".rtf", ".doc", ".docx"}
+    json_extensions = {".json"}
 
     if extension in pdf_extensions:
         return "pdf"
@@ -66,10 +85,7 @@ def determine_file_category(extension):
     if extension in document_extensions:
         return "document"
 
-    if extension in spreadsheet_extensions:
-        return "spreadsheet"
-
-    if extension in presentation_extensions:
-        return "presentation"
+    if extension in json_extensions:
+        return "json"
 
     return "unknown"
