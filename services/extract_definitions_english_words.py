@@ -16,7 +16,7 @@ class ExtractDefinitions:
         tokenized_with_definitions =[]
         
         for item in tokens:
-            word = item.get("text","")
+            word = item.get("lemma","")
             synsets = wordnet.synsets(word)
             
             new_item = item.copy()
