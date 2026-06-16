@@ -1,216 +1,158 @@
-# import pytest
-# from unittest.mock import patch
+import pytest
+from unittest.mock import patch
 
-# from services.retrieve_all_story_data_learnsanskrit import RetrieveAllStoryDataLearnSanskrit
+from services.learnsanskrit_metadata_services import RetrieveAllStoryDataLearnSanskrit
 
 
-# # =========================================================
-# # SUCCESS CASE
-# # =========================================================
+# =========================================================
+# SUCCESS CASE
+# =========================================================
 
-# def test_retrieve_all_success():
+@patch(
+    "services.learnsanskrit_metadata_services.GetUnusedStories"
+)
+def test_retrieve_all_success(mock_repo):
 
-#     mock_data = [
-#         {
-#             "_id": "1",
-#             "title": "Rabbit Story"
-#         }
-#     ]
+    mock_data = [
+        {
+            "_id": "1",
+            "title": "Rabbit Story"
+        }
+    ]
 
-#     with patch(
-#         "services.retrieve_all_story_data_learnsanskrit.GetAllStoryDataLearnSanskrit"
-#     ) as mock_repo:
+    mock_repo.return_value.get_all.return_value = mock_data
 
-#         mock_repo.return_value.get_all_story_data.return_value = mock_data
+    service = RetrieveAllStoryDataLearnSanskrit()
 
-#         service = RetrieveAllStoryDataLearnSanskrit()
+    result = service.retrieve_all()
 
-#         result = service.retrieve_all()
+    assert result["success"] is True
+    assert result["data"] == mock_data
+    assert len(result["data"]) == 1
+    assert result["data"][0]["title"] == "Rabbit Story"
 
-#         assert result["success"] is True
-#         assert result["data"] == mock_data
-#         assert len(result["data"]) == 1
-#         assert result["data"][0]["title"] == "Rabbit Story"
 
+# =========================================================
+# EMPTY LIST
+# =========================================================
 
-# # =========================================================
-# # EMPTY LIST
-# # =========================================================
+@patch(
+    "services.learnsanskrit_metadata_services.GetUnusedStories"
+)
+def test_retrieve_all_empty_list(mock_repo):
 
-# def test_retrieve_all_empty_list():
+    mock_repo.return_value.get_all.return_value = []
 
-#     with patch(
-#         "services.retrieve_all_story_data_learnsanskrit.GetAllStoryDataLearnSanskrit"
-#     ) as mock_repo:
+    service = RetrieveAllStoryDataLearnSanskrit()
 
-#         mock_repo.return_value.get_all_story_data.return_value = []
+    result = service.retrieve_all()
 
-#         service = RetrieveAllStoryDataLearnSanskrit()
+    assert result["success"] is True
+    assert result["data"] == []
 
-#         result = service.retrieve_all()
 
-#         assert result["success"] is True
-#         assert result["data"] == []
-#         assert len(result["data"]) == 0
+# =========================================================
+# NONE RESPONSE
+# =========================================================
 
+@patch(
+    "services.learnsanskrit_metadata_services.GetUnusedStories"
+)
+def test_retrieve_all_none_response(mock_repo):
 
-# # =========================================================
-# # NONE RESPONSE
-# # =========================================================
+    mock_repo.return_value.get_all.return_value = None
 
-# def test_retrieve_all_none_response():
+    service = RetrieveAllStoryDataLearnSanskrit()
 
-#     with patch(
-#         "services.retrieve_all_story_data_learnsanskrit.GetAllStoryDataLearnSanskrit"
-#     ) as mock_repo:
+    result = service.retrieve_all()
 
-#         mock_repo.return_value.get_all_story_data.return_value = None
+    assert result["success"] is True
+    assert result["data"] is None
 
-#         service = RetrieveAllStoryDataLearnSanskrit()
 
-#         result = service.retrieve_all()
 
-#         assert result["success"] is True
-#         assert result["data"] is None
+# =========================================================
+# GENERIC EXCEPTION
+# =========================================================
 
+@patch(
+    "services.learnsanskrit_metadata_services.GetUnusedStories"
+)
+def test_retrieve_all_generic_exception(mock_repo):
 
-# # =========================================================
-# # FILE NOT FOUND
-# # =========================================================
+    mock_repo.return_value.get_all.side_effect = Exception(
+        "Unexpected Error"
+    )
 
-# def test_retrieve_all_file_not_found():
+    service = RetrieveAllStoryDataLearnSanskrit()
 
-#     with patch(
-#         "services.retrieve_all_story_data_learnsanskrit.GetAllStoryDataLearnSanskrit"
-#     ) as mock_repo:
+    result = service.retrieve_all()
 
-#         mock_repo.return_value.get_all_story_data.side_effect = (
-#             FileNotFoundError("stories_data.json not found")
-#         )
+    assert result["success"] is False
+    assert result["message"] == "Unexpected Error"
 
-#         service = RetrieveAllStoryDataLearnSanskrit()
 
-#         result = service.retrieve_all()
+# =========================================================
+# RESPONSE STRUCTURE
+# =========================================================
 
-#         assert result["success"] is False
-#         assert "not found" in result["message"]
+@patch(
+    "services.learnsanskrit_metadata_services.GetUnusedStories"
+)
+def test_retrieve_all_response_structure(mock_repo):
 
+    mock_repo.return_value.get_all.return_value = []
 
-# # =========================================================
-# # INVALID JSON
-# # =========================================================
+    service = RetrieveAllStoryDataLearnSanskrit()
 
-# def test_retrieve_all_invalid_json():
+    result = service.retrieve_all()
 
-#     with patch(
-#         "services.retrieve_all_story_data_learnsanskrit.GetAllStoryDataLearnSanskrit"
-#     ) as mock_repo:
+    assert isinstance(result, dict)
+    assert "success" in result
+    assert "data" in result
 
-#         mock_repo.return_value.get_all_story_data.side_effect = (
-#             ValueError("Invalid JSON format")
-#         )
 
-#         service = RetrieveAllStoryDataLearnSanskrit()
+# =========================================================
+# VERIFY REPOSITORY METHOD CALLED
+# =========================================================
 
-#         result = service.retrieve_all()
+@patch(
+    "services.learnsanskrit_metadata_services.GetUnusedStories"
+)
+def test_repository_method_called_once(mock_repo):
 
-#         assert result["success"] is False
-#         assert "Invalid JSON format" in result["message"]
+    mock_repo.return_value.get_all.return_value = []
 
+    service = RetrieveAllStoryDataLearnSanskrit()
 
-# # =========================================================
-# # GENERIC EXCEPTION
-# # =========================================================
+    service.retrieve_all()
 
-# def test_retrieve_all_generic_exception():
+    mock_repo.return_value.get_all.assert_called_once()
 
-#     with patch(
-#         "services.retrieve_all_story_data_learnsanskrit.GetAllStoryDataLearnSanskrit"
-#     ) as mock_repo:
 
-#         mock_repo.return_value.get_all_story_data.side_effect = (
-#             Exception("Unexpected Error")
-#         )
+# =========================================================
+# LARGE DATASET
+# =========================================================
 
-#         service = RetrieveAllStoryDataLearnSanskrit()
+@patch(
+    "services.learnsanskrit_metadata_services.GetUnusedStories"
+)
+def test_retrieve_large_dataset(mock_repo):
 
-#         result = service.retrieve_all()
+    mock_data = [
+        {
+            "_id": str(i),
+            "title": f"Story {i}"
+        }
+        for i in range(1000)
+    ]
 
-#         assert result["success"] is False
-#         assert result["message"] == "Unexpected Error"
+    mock_repo.return_value.get_all.return_value = mock_data
 
+    service = RetrieveAllStoryDataLearnSanskrit()
 
-# # =========================================================
-# # RESPONSE STRUCTURE
-# # =========================================================
+    result = service.retrieve_all()
 
-# def test_retrieve_all_response_structure():
-
-#     mock_data = [
-#         {
-#             "_id": "100",
-#             "title": "Lion Story"
-#         }
-#     ]
-
-#     with patch(
-#         "services.retrieve_all_story_data_learnsanskrit.GetAllStoryDataLearnSanskrit"
-#     ) as mock_repo:
-
-#         mock_repo.return_value.get_all_story_data.return_value = mock_data
-
-#         service = RetrieveAllStoryDataLearnSanskrit()
-
-#         result = service.retrieve_all()
-
-#         assert isinstance(result, dict)
-#         assert "success" in result
-#         assert "data" in result
-
-
-# # =========================================================
-# # VERIFY REPOSITORY METHOD CALLED
-# # =========================================================
-
-# def test_repository_method_called_once():
-
-#     with patch(
-#         "services.retrieve_all_story_data_learnsanskrit.GetAllStoryDataLearnSanskrit"
-#     ) as mock_repo:
-
-#         mock_repo.return_value.get_all_story_data.return_value = []
-
-#         service = RetrieveAllStoryDataLearnSanskrit()
-
-#         service.retrieve_all()
-
-#         mock_repo.return_value.get_all_story_data.assert_called_once()
-
-
-# # =========================================================
-# # LARGE DATASET
-# # =========================================================
-
-# def test_retrieve_large_dataset():
-
-#     mock_data = []
-
-#     for i in range(1000):
-#         mock_data.append({
-#             "_id": str(i),
-#             "title": f"Story {i}"
-#         })
-
-#     with patch(
-#         "services.retrieve_all_story_data_learnsanskrit.GetAllStoryDataLearnSanskrit"
-#     ) as mock_repo:
-
-#         mock_repo.return_value.get_all_story_data.return_value = mock_data
-
-#         service = RetrieveAllStoryDataLearnSanskrit()
-
-#         result = service.retrieve_all()
-
-#         assert result["success"] is True
-#         assert len(result["data"]) == 1000
-#         assert result["data"][500]["title"] == "Story 500"
+    assert result["success"] is True
+    assert len(result["data"]) == 1000
+    assert result["data"][500]["title"] == "Story 500"
