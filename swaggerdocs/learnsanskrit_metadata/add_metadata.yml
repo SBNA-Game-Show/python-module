@@ -1,0 +1,54 @@
+Adds a new Story to the collection from LearnSanskrit.cc
+---
+
+tags:
+  - LearnSanskrit.cc Meta Data
+
+summary: Add Complete Meta Data from LearnSanskrit.cc
+
+description: >
+  ⚠️ This endpoint retrieves all required fable information from LearnSanskrit.cc categories,
+  converts it into the fable category, and stores it in MongoDB.
+
+# security:
+#   - Bearer: []
+
+parameters:
+  - name: workflow_example
+    in: body
+    required: false
+    schema:
+      type: object
+      properties:
+        workflow:
+          type: array
+          items:
+            type: string
+          example:
+            - Fetches Meta data from LearnSanskrit.cc
+            - Cleans and normalizes text
+            - Stores processed output in MongoDB Atlas
+responses:
+  200:
+    description: Meta Data added successfully.
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Meta Data downloaded successfully
+
+  500:
+    description: Internal server error.
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Internal server error

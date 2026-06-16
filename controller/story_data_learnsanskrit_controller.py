@@ -1,6 +1,6 @@
 
 from flask import jsonify,request
-from services.retrieve_all_story_data_learnsanskrit import RetrieveAllStoryDataLearnSanskrit
+from services.learnsanskrit_metadata_services import RetrieveAllStoryDataLearnSanskrit
 from services.learnsanskrit_fable_extraction_pipeline.extract_new_fable_learnsanskrit import FetchNewFable
 from services.learnsanskrit_metadata_extraction_pipeline.write_to_DB import WriteLearnSanskritCCMetaData
 
@@ -35,8 +35,8 @@ def add_new_story():
             "message": "story_id query parameter is required"
         }), 400
 
-    service = FetchNewFable()
-    result = service.execute(story_id)
+    service = FetchNewFable(story_id)
+    result = service.execute()
 
     return jsonify({
         "data": result

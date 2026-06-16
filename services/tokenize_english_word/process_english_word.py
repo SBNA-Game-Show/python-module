@@ -1,6 +1,7 @@
 from services.tokenize_english_word.tokenize_english_word import TokenizeEnglishWord
 from services.tokenize_english_word.get_synonyms import GetSynonyms
 from services.tokenize_english_word.get_antonyms import GetAntonyms
+from services.tokenize_english_word.add_definition import AddDefinition
 
 
 import logging
@@ -22,11 +23,13 @@ class ProcessEnglishWord:
 
             synonyms = self._get_synonyms(token_data)
             antonyms = self._get_antonyms(token_data)
+            definition = self._add_definition(self.word)
 
             return {
                 "token": token_data,
                 "synonyms": synonyms,
-                "antonyms": antonyms
+                "antonyms": antonyms,
+                "definition":definition
             }
 
         except ValueError:
@@ -54,3 +57,7 @@ class ProcessEnglishWord:
     def _get_antonyms(self, tokenized_word):
         req = GetAntonyms(tokenized_word)
         return req.execute()
+    
+    def _add_definition(self,word):
+        req = AddDefinition(word)
+        return req.get_definition()

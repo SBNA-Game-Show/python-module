@@ -2,13 +2,10 @@ from urllib import response
 
 from flask import jsonify, request
 
-from services.retrieve_all_tokenized_stories import RetrieveTokenizedStories
-from services.tokenized_data_service.tokenized_data_service import RetrieveTokenizedStoryById
-from services.retrieve_tokenized_stories_by_category import RetrieveTokenizedStoryByCategory
+
+from services.tokenized_data_service import RetrieveTokenizedStories,RetrieveTokenizedStoryById,RetrieveTokenizedStoryByCategory
 
 
-
-    
 ## Get All tokenized stories from collection
 
 def fetch_all_tokenized_stories():
@@ -25,6 +22,7 @@ def fetch_all_tokenized_stories():
 ## Get tokenized story by id
 
 def fetch_tokenized_story_by_id():
+    
 
     # FETCH QUERY PARAM
     story_id = request.args.get("story_id")

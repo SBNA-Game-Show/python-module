@@ -12,13 +12,12 @@ from config.swagger_config import SWAGGER_CONFIG,SWAGGER_TEMPLATE
 from routes.tokenized_data_routes import tokenize_data_bp
 from routes.learnsanskrit_meta_data_routes import story_data_bp
 from routes.dictionary_routes import dictionary_bp
+from routes.file_upload_routes import upload_file_bp
 
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
-app = Flask(__name__,template_folder="docs",static_url_path="/assets",
-    static_folder=os.path.join(BASE_DIR, "docs/assets"))
+app = Flask(__name__,template_folder="docs",)
 CORS(app)
 
 Swagger(app, config=SWAGGER_CONFIG, template=SWAGGER_TEMPLATE)
@@ -47,6 +46,7 @@ def debug_files():
 app.register_blueprint(story_data_bp,url_prefix = BASE_URL)
 app.register_blueprint(tokenize_data_bp,url_prefix=BASE_URL)
 app.register_blueprint(dictionary_bp,url_prefix = BASE_URL)
+app.register_blueprint(upload_file_bp,url_prefix = BASE_URL)
 
 
 

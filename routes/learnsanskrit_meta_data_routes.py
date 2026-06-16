@@ -8,8 +8,8 @@ from controller.story_data_learnsanskrit_controller import fetch_all_story_data,
 
 story_data_bp = Blueprint("story_data_bp",__name__)
 
-
-story_data_bp.route("/writeMeta",methods=["POST"])(write_meta_data)
+story_data_controller = swag_from("../swaggerdocs/learnsanskrit_metadata/add_metadata.yml")(write_meta_data)
+story_data_bp.route("/writeMeta",methods=["POST"])(story_data_controller)
 
 decorated_controller = swag_from("../swaggerdocs/learnsanskrit_metadata/get_available_story_data_learnsanskrit.yml")(fetch_all_story_data)
 story_data_bp.route("/getAll", methods=["GET"])(decorated_controller)

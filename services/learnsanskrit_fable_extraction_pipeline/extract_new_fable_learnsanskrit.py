@@ -9,27 +9,27 @@ from services.learnsanskrit_fable_extraction_pipeline.convert_to_JSON import Ext
 from services.tokenize_english_passage import TokenizeEnglishVersion
 from services.tokenize_sanskrit_passage import TokenizeSanskritVersion
 from services.extract_english_synonym_antonym import ExtractEnglishSynonymAntonym
+from services.extract_definitions_english_words import ExtractDefinitions
 
-from repository.learnsanskrit_metadata_repo import WriteTokenizedStoryToMongoDB,UpdateLearnSanskritMetaData
-from repository.get_learnsanskrit_meta_data_by_id import GetMetaDataById
+from repository.learnsanskrit_metadata_repo import WriteTokenizedStoryToMongoDB,UpdateLearnSanskritMetaData,GetMetaDataById
 from services.clean_tokenized_english_words_array import CleanEnglishTokenizedData
 
 class FetchNewFable:
     """Orchestrates the pipeline to fetch, clean, tokenize, and save a fable."""
 
-    def __init__(self, file_name="tokenized_stories.json"):
-        self.file_name = file_name
+    def __init__(self, story_id):
+        self.story_id = story_id
 
-    def execute(self, story_id):
+    def execute(self):
         """Runs the complete execution pipeline for a given story ID."""
         
 
         
         # Fetching from DB
-        story_data = self._get_story_data_from_DB(story_id)
+        story_data = self._get_story_data_from_DB(self.story_id)
         
         if not story_data:
-            raise ValueError(f"No data found for the given ID: {story_id}")
+            raise ValueError(f"No data found for the given ID: {self.story_id}")
             
         vendor_id = story_data.get("vendorId")
         
@@ -45,7 +45,7 @@ class FetchNewFable:
         raw_data = self._retrieve_raw_data(vendor_id)
         cleaned_data = self._clean_data(raw_data)
         ## Adding the same request id for the story
-        cleaned_data["_id"] = story_id
+        cleaned_data["_id"] = self.story_id
         cleaned_data["category"] = story_category
         
         ## 3. Enrich / Tokenize
@@ -53,8 +53,11 @@ class FetchNewFable:
         tokenized_english = self._tokenize_english_version(cleaned_data)
         #Adding Synonyms and antonyms
         tokenized_english_with_grammer = self._add_synonym_antonym(tokenized_english)
+        definitions_added = self._add_definitions(tokenized_english_with_grammer)
+        
+        
         #Tokenizing Sanskrit words
-        tokenized_sanskrit_version = self._tokenize_sanskrit_version(tokenized_english_with_grammer)
+        tokenized_sanskrit_version = self._tokenize_sanskrit_version(definitions_added)
         # cleaning english words that does not have synonyms and antonyms
         final_version = self._clean_english_data(tokenized_sanskrit_version)
         
@@ -68,7 +71,7 @@ class FetchNewFable:
         
         # Updating Learn Sanskrit Metadata collection
         
-        updater = self._update_story_toDB(story_id)
+        updater = self._update_story_toDB(self.story_id)
         
         # Writes to the file system 
                 # 1. Fetch metadata
@@ -123,6 +126,11 @@ class FetchNewFable:
     
     def _clean_english_data(self,data):
         req = CleanEnglishTokenizedData(data)
+        return req.execute()
+    
+    
+    def _add_definitions(self,data):
+        req = ExtractDefinitions(data)
         return req.execute()
     
     ## Writing to file System for testing purposes only

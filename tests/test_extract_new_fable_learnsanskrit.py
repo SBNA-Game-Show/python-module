@@ -28,6 +28,7 @@
 #     @patch.object(FetchNewFable, "_clean_data")
 #     @patch.object(FetchNewFable, "_retrieve_raw_data")
 #     @patch.object(FetchNewFable, "_get_story_data")
+#     @patch.object(FetchNewFable,"_get_story_data_from_DB")
 #     def test_execute_success(
 #         self,
 #         mock_get_story_data,
@@ -72,9 +73,9 @@
 #             "success": True
 #         }
 
-#         service = FetchNewFable()
+#         service = FetchNewFable("123")
 
-#         result = service.execute("123")
+#         result = service.execute()
 
 #         assert result == "FABLE DOWNLOADED SUCCESSFULLY"
 
@@ -88,10 +89,10 @@
 #         """ Test when story metadata cannot be found. Expected: ValueError should be raised. """
 #         mock_get_story_data.return_value = None
 
-#         service = FetchNewFable()
+#         service = FetchNewFable("999")
 
 #         with pytest.raises(ValueError) as exc:
-#             service.execute("999")
+#             service.execute()
 
 #         assert "No data found for the given ID" in str(exc.value)
 
@@ -127,10 +128,10 @@
 
 #         mock_write_to_file.return_value = False
 
-#         service = FetchNewFable()
+#         service = FetchNewFable("123")
 
 #         with pytest.raises(IOError) as exc:
-#             service.execute("123")
+#             service.execute()
 
 #         assert "Failed writing tokenized story" in str(exc.value)
 
@@ -172,10 +173,10 @@
 #             "message": "Update failed"
 #         }
 
-#         service = FetchNewFable()
+#         service = FetchNewFable("123")
 
 #         with pytest.raises(ValueError) as exc:
-#             service.execute("123")
+#             service.execute()
 
 #         assert "Update failed" in str(exc.value)
 
@@ -197,7 +198,7 @@
 #         mock_retrieve_raw_data.return_value = {}
 #         mock_clean_data.return_value = {}
 
-#         service = FetchNewFable()
+#         service = FetchNewFable("123")
 
 #         with patch.object(service, "_tokenize_english_version", return_value={}), \
 #              patch.object(service, "_add_synonym_antonym", return_value={}), \
@@ -205,7 +206,7 @@
 #              patch.object(service, "_write_to_file_system", return_value=True), \
 #              patch.object(service, "_update_story_status", return_value={"success": True}):
 
-#             result = service.execute("123")
+#             result = service.execute()
 
 #         assert result == "FABLE DOWNLOADED SUCCESSFULLY"
 

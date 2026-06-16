@@ -1,334 +1,334 @@
-# import pytest
-# from unittest.mock import patch
+import pytest
+from unittest.mock import patch
 
-# from repository.file_system.get_stroy_data_by_id import GetStoryData
+from repository.file_system.get_stroy_data_by_id import GetStoryData
 
 
-# # =========================================================
-# # SUCCESS CASE
-# # =========================================================
+# =========================================================
+# SUCCESS CASE
+# =========================================================
 
-# def test_get_story_data_success():
+def test_get_story_data_success():
 
-#     mock_data = [
-#         {
-#             "category": "Animals",
-#             "story_description": [
-#                 {
-#                     "_id": "1",
-#                     "title": "Rabbit Story"
-#                 },
-#                 {
-#                     "_id": "2",
-#                     "title": "Lion Story"
-#                 }
-#             ]
-#         }
-#     ]
+    mock_data = [
+        {
+            "category": "Animals",
+            "story_description": [
+                {
+                    "_id": "1",
+                    "title": "Rabbit Story"
+                },
+                {
+                    "_id": "2",
+                    "title": "Lion Story"
+                }
+            ]
+        }
+    ]
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = mock_data
+        mock_reader.return_value.read_file.return_value = mock_data
 
-#         repo = GetStoryData("1")
+        repo = GetStoryData("1")
 
-#         assert repo.response is not None
-#         assert repo.response["_id"] == "1"
-#         assert repo.response["title"] == "Rabbit Story"
+        assert repo.response is not None
+        assert repo.response["_id"] == "1"
+        assert repo.response["title"] == "Rabbit Story"
 
 
-# # =========================================================
-# # STORY NOT FOUND
-# # =========================================================
+# =========================================================
+# STORY NOT FOUND
+# =========================================================
 
-# def test_story_not_found():
+def test_story_not_found():
 
-#     mock_data = [
-#         {
-#             "category": "Animals",
-#             "story_description": [
-#                 {
-#                     "_id": "1",
-#                     "title": "Rabbit Story"
-#                 }
-#             ]
-#         }
-#     ]
+    mock_data = [
+        {
+            "category": "Animals",
+            "story_description": [
+                {
+                    "_id": "1",
+                    "title": "Rabbit Story"
+                }
+            ]
+        }
+    ]
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = mock_data
+        mock_reader.return_value.read_file.return_value = mock_data
 
-#         repo = GetStoryData("999")
+        repo = GetStoryData("999")
 
-#         assert repo.response is None
+        assert repo.response is None
 
 
-# # =========================================================
-# # EMPTY FILE DATA
-# # =========================================================
+# =========================================================
+# EMPTY FILE DATA
+# =========================================================
 
-# def test_empty_file_data():
+def test_empty_file_data():
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = []
+        mock_reader.return_value.read_file.return_value = []
 
-#         repo = GetStoryData("1")
+        repo = GetStoryData("1")
 
-#         assert repo.response is None
+        assert repo.response is None
 
 
-# # =========================================================
-# # NONE FILE DATA
-# # =========================================================
+# =========================================================
+# NONE FILE DATA
+# =========================================================
 
-# def test_none_file_data():
+def test_none_file_data():
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = None
+        mock_reader.return_value.read_file.return_value = None
 
-#         repo = GetStoryData("1")
+        repo = GetStoryData("1")
 
-#         assert repo.response is None
+        assert repo.response is None
 
 
-# # =========================================================
-# # EMPTY story_description
-# # =========================================================
+# =========================================================
+# EMPTY story_description
+# =========================================================
 
-# def test_empty_story_description():
+def test_empty_story_description():
 
-#     mock_data = [
-#         {
-#             "category": "Animals",
-#             "story_description": []
-#         }
-#     ]
+    mock_data = [
+        {
+            "category": "Animals",
+            "story_description": []
+        }
+    ]
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = mock_data
+        mock_reader.return_value.read_file.return_value = mock_data
 
-#         repo = GetStoryData("1")
+        repo = GetStoryData("1")
 
-#         assert repo.response is None
+        assert repo.response is None
 
 
-# # =========================================================
-# # MISSING story_description KEY
-# # =========================================================
+# =========================================================
+# MISSING story_description KEY
+# =========================================================
 
-# def test_missing_story_description_key():
+def test_missing_story_description_key():
 
-#     mock_data = [
-#         {
-#             "category": "Animals"
-#         }
-#     ]
+    mock_data = [
+        {
+            "category": "Animals"
+        }
+    ]
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = mock_data
+        mock_reader.return_value.read_file.return_value = mock_data
 
-#         repo = GetStoryData("1")
+        repo = GetStoryData("1")
 
-#         assert repo.response is None
+        assert repo.response is None
 
 
-# # =========================================================
-# # MULTIPLE CATEGORIES
-# # =========================================================
+# =========================================================
+# MULTIPLE CATEGORIES
+# =========================================================
 
-# def test_multiple_categories_story_found():
+def test_multiple_categories_story_found():
 
-#     mock_data = [
-#         {
-#             "category": "Animals",
-#             "story_description": [
-#                 {
-#                     "_id": "1",
-#                     "title": "Rabbit Story"
-#                 }
-#             ]
-#         },
-#         {
-#             "category": "Moral Stories",
-#             "story_description": [
-#                 {
-#                     "_id": "2",
-#                     "title": "Wise King"
-#                 }
-#             ]
-#         }
-#     ]
+    mock_data = [
+        {
+            "category": "Animals",
+            "story_description": [
+                {
+                    "_id": "1",
+                    "title": "Rabbit Story"
+                }
+            ]
+        },
+        {
+            "category": "Moral Stories",
+            "story_description": [
+                {
+                    "_id": "2",
+                    "title": "Wise King"
+                }
+            ]
+        }
+    ]
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = mock_data
+        mock_reader.return_value.read_file.return_value = mock_data
 
-#         repo = GetStoryData("2")
+        repo = GetStoryData("2")
 
-#         assert repo.response is not None
-#         assert repo.response["title"] == "Wise King"
+        assert repo.response is not None
+        assert repo.response["title"] == "Wise King"
 
 
-# # =========================================================
-# # DUPLICATE STORY IDS
-# # RETURNS FIRST MATCH
-# # =========================================================
+# =========================================================
+# DUPLICATE STORY IDS
+# RETURNS FIRST MATCH
+# =========================================================
 
-# def test_duplicate_story_ids():
+def test_duplicate_story_ids():
 
-#     mock_data = [
-#         {
-#             "category": "Animals",
-#             "story_description": [
-#                 {
-#                     "_id": "1",
-#                     "title": "First Story"
-#                 }
-#             ]
-#         },
-#         {
-#             "category": "Other",
-#             "story_description": [
-#                 {
-#                     "_id": "1",
-#                     "title": "Second Story"
-#                 }
-#             ]
-#         }
-#     ]
+    mock_data = [
+        {
+            "category": "Animals",
+            "story_description": [
+                {
+                    "_id": "1",
+                    "title": "First Story"
+                }
+            ]
+        },
+        {
+            "category": "Other",
+            "story_description": [
+                {
+                    "_id": "1",
+                    "title": "Second Story"
+                }
+            ]
+        }
+    ]
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = mock_data
+        mock_reader.return_value.read_file.return_value = mock_data
 
-#         repo = GetStoryData("1")
+        repo = GetStoryData("1")
 
-#         assert repo.response["title"] == "First Story"
+        assert repo.response["title"] == "First Story"
 
 
-# # =========================================================
-# # VERIFY FILE NAME
-# # =========================================================
+# =========================================================
+# VERIFY FILE NAME
+# =========================================================
 
-# def test_correct_file_name_used():
+def test_correct_file_name_used():
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = []
+        mock_reader.return_value.read_file.return_value = []
 
-#         GetStoryData("1")
+        GetStoryData("1")
 
-#         mock_reader.assert_called_once_with("stories_data.json")
+        mock_reader.assert_called_once_with("stories_data.json")
 
 
-# # =========================================================
-# # VERIFY read_file CALLED ONCE
-# # =========================================================
+# =========================================================
+# VERIFY read_file CALLED ONCE
+# =========================================================
 
-# def test_read_file_called_once():
+def test_read_file_called_once():
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = []
+        mock_reader.return_value.read_file.return_value = []
 
-#         GetStoryData("1")
+        GetStoryData("1")
 
-#         mock_reader.return_value.read_file.assert_called_once()
+        mock_reader.return_value.read_file.assert_called_once()
 
 
-# # =========================================================
-# # LARGE DATASET
-# # =========================================================
+# =========================================================
+# LARGE DATASET
+# =========================================================
 
-# def test_large_dataset():
+def test_large_dataset():
 
-#     stories = []
+    stories = []
 
-#     for i in range(1000):
+    for i in range(1000):
 
-#         stories.append({
-#             "_id": str(i),
-#             "title": f"Story {i}"
-#         })
+        stories.append({
+            "_id": str(i),
+            "title": f"Story {i}"
+        })
 
-#     mock_data = [
-#         {
-#             "category": "Large Category",
-#             "story_description": stories
-#         }
-#     ]
+    mock_data = [
+        {
+            "category": "Large Category",
+            "story_description": stories
+        }
+    ]
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.return_value = mock_data
+        mock_reader.return_value.read_file.return_value = mock_data
 
-#         repo = GetStoryData("500")
+        repo = GetStoryData("500")
 
-#         assert repo.response is not None
-#         assert repo.response["title"] == "Story 500"
+        assert repo.response is not None
+        assert repo.response["title"] == "Story 500"
 
 
-# # =========================================================
-# # FILE NOT FOUND ERROR
-# # =========================================================
+# =========================================================
+# FILE NOT FOUND ERROR
+# =========================================================
 
-# def test_file_not_found_error():
+def test_file_not_found_error():
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.side_effect = (
-#             FileNotFoundError("stories_data.json not found")
-#         )
+        mock_reader.return_value.read_file.side_effect = (
+            FileNotFoundError("stories_data.json not found")
+        )
 
-#         with pytest.raises(FileNotFoundError):
+        with pytest.raises(FileNotFoundError):
 
-#             GetStoryData("1")
+            GetStoryData("1")
 
 
-# # =========================================================
-# # INVALID JSON ERROR
-# # =========================================================
+# =========================================================
+# INVALID JSON ERROR
+# =========================================================
 
-# def test_invalid_json_error():
+def test_invalid_json_error():
 
-#     with patch(
-#         "repository.file_system.get_stroy_data_by_id.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_stroy_data_by_id.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_reader.return_value.read_file.side_effect = (
-#             ValueError("Invalid JSON format")
-#         )
+        mock_reader.return_value.read_file.side_effect = (
+            ValueError("Invalid JSON format")
+        )
 
-#         with pytest.raises(ValueError):
+        with pytest.raises(ValueError):
 
-#             GetStoryData("1")
+            GetStoryData("1")
 

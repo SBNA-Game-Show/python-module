@@ -1,111 +1,91 @@
-# import pytest
-# from unittest.mock import patch
+import pytest
+from unittest.mock import patch
 
-# from services.retrieve_tokenized_story_by_Id import RetrieveTokenizedStoryById
+from services.tokenized_data_service import RetrieveTokenizedStoryById
 
 
-# class TestRetrieveTokenizedStoryById:
+class TestRetrieveTokenizedStoryById:
+    
+# =========================================================
+# When No Story Id
+# =========================================================
 
-#     def test_raises_value_error_when_story_id_is_none(self):
+    def test_raises_value_error_when_story_id_is_none(self):
 
-#         with pytest.raises(ValueError) as exc:
+        with pytest.raises(ValueError) as exc:
 
-#             RetrieveTokenizedStoryById(None)
+            RetrieveTokenizedStoryById(None)
 
-#         assert str(exc.value) == "story_id cannot be None"
+        assert str(exc.value) == "story_id cannot be None"
+        
+        
+# =========================================================
+# SUCCESS CASE
+# =========================================================
 
-#     @patch(
-#         "services.retrieve_tokenized_story_by_Id.GetTokenizedStoryById"
-#     )
-#     def test_returns_story_when_story_exists(
-#         self,
-#         mock_repository
-#     ):
+@patch("services.tokenized_data_service.GetTokenizedStoryByIdFromMongoDB")
+def test_returns_story_when_story_exists(mock_repository):
 
-#         mock_repository.return_value.retrieve_story.return_value = {
-#             "_id": "1",
-#             "title": "Lion and Mouse"
-#         }
+    mock_repository.return_value.get_story.return_value = {
+        "_id": "1",
+        "title": "Lion and Mouse"
+    }
 
-#         service = RetrieveTokenizedStoryById("1")
+    service = RetrieveTokenizedStoryById("1")
+    result = service.retrieve_story()
 
-#         result = service.retrieve_story()
+    assert result == {
+        "_id": "1",
+        "title": "Lion and Mouse"
+    }
+        
+# =========================================================
+# Repository Called with correct id
+# =========================================================
+@patch("services.tokenized_data_service.GetTokenizedStoryByIdFromMongoDB")
+def test_repository_called_with_correct_story_id(mock_repository):
 
-#         assert result == {
-#             "_id": "1",
-#             "title": "Lion and Mouse"
-#         }
+    mock_repository.return_value.get_story.return_value = {"_id": "1"}
 
-#     @patch(
-#         "services.retrieve_tokenized_story_by_Id.GetTokenizedStoryById"
-#     )
-#     def test_raises_lookup_error_when_story_not_found(
-#         self,
-#         mock_repository
-#     ):
+    service = RetrieveTokenizedStoryById("1")
+    service.retrieve_story()
 
-#         mock_repository.return_value.retrieve_story.return_value = None
+    mock_repository.assert_called_once_with("1")
+    
+# =========================================================
+# Repository Called only once
+# =========================================================
 
-#         service = RetrieveTokenizedStoryById("100")
+    @patch(
+        "services.tokenized_data_service.GetTokenizedStoryById"
+    )
+    def test_repository_retrieve_story_called_once(
+        self,
+        mock_repository
+    ):
 
-#         with pytest.raises(LookupError) as exc:
+        mock_repository.return_value.retrieve_story.return_value = {
+            "_id": "1"
+        }
 
-#             service.retrieve_story()
+        service = RetrieveTokenizedStoryById("1")
 
-#         assert str(exc.value) == "Story not found"
+        service.retrieve_story()
 
-#     @patch(
-#         "services.retrieve_tokenized_story_by_Id.GetTokenizedStoryById"
-#     )
-#     def test_repository_called_with_correct_story_id(
-#         self,
-#         mock_repository
-#     ):
+        mock_repository.return_value.retrieve_story.assert_called_once()
+        
+# =========================================================
+# Database error
+# =========================================================
 
-#         mock_repository.return_value.retrieve_story.return_value = {
-#             "_id": "1"
-#         }
+@patch("services.tokenized_data_service.GetTokenizedStoryByIdFromMongoDB")
+def test_propagates_repository_exceptions(mock_repository):
 
-#         service = RetrieveTokenizedStoryById("1")
+    mock_repository.return_value.get_story.side_effect = Exception("Database error")
 
-#         service.retrieve_story()
+    service = RetrieveTokenizedStoryById("1")
 
-#         mock_repository.assert_called_once_with("1")
+    with pytest.raises(Exception) as exc:
+        service.retrieve_story()
 
-#     @patch(
-#         "services.retrieve_tokenized_story_by_Id.GetTokenizedStoryById"
-#     )
-#     def test_repository_retrieve_story_called_once(
-#         self,
-#         mock_repository
-#     ):
-
-#         mock_repository.return_value.retrieve_story.return_value = {
-#             "_id": "1"
-#         }
-
-#         service = RetrieveTokenizedStoryById("1")
-
-#         service.retrieve_story()
-
-#         mock_repository.return_value.retrieve_story.assert_called_once()
-
-#     @patch(
-#         "services.retrieve_tokenized_story_by_Id.GetTokenizedStoryById"
-#     )
-#     def test_propagates_repository_exceptions(
-#         self,
-#         mock_repository
-#     ):
-
-#         mock_repository.return_value.retrieve_story.side_effect = (
-#             Exception("Database error")
-#         )
-
-#         service = RetrieveTokenizedStoryById("1")
-
-#         with pytest.raises(Exception) as exc:
-
-#             service.retrieve_story()
-
-#         assert str(exc.value) == "Database error"
+    assert str(exc.value) == "Database error"

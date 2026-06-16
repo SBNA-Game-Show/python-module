@@ -1,275 +1,275 @@
 
-# import json
-# import pytest
-# from unittest.mock import patch, MagicMock
+import json
+import pytest
+from unittest.mock import patch, MagicMock
 
-# from repository.file_system.get_all_tokenized_stories_learnsanskrit import GetAllTokenizedStories
+from repository.file_system.get_all_tokenized_stories_learnsanskrit import GetAllTokenizedStories
 
-# # =========================================================
-# # SUCCESS CASE
-# # =========================================================
+# =========================================================
+# SUCCESS CASE
+# =========================================================
 
-# def test_get_all_stories_success():
+def test_get_all_stories_success():
 
-#     mock_data = [
-#         {
-#             "_id": "1",
-#             "title": "Rabbit Story"
-#         }
-#     ]
+    mock_data = [
+        {
+            "_id": "1",
+            "title": "Rabbit Story"
+        }
+    ]
 
-#     with patch(
-#         "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_instance = MagicMock()
-#         mock_instance.read_file.return_value = mock_data
+        mock_instance = MagicMock()
+        mock_instance.read_file.return_value = mock_data
 
-#         mock_reader.return_value = mock_instance
+        mock_reader.return_value = mock_instance
 
-#         repo = GetAllTokenizedStories()
+        repo = GetAllTokenizedStories()
 
-#         result = repo.get_all_stories()
+        result = repo.get_all_stories()
 
-#         assert result == mock_data
-#         assert len(result) == 1
-#         assert result[0]["title"] == "Rabbit Story"
+        assert result == mock_data
+        assert len(result) == 1
+        assert result[0]["title"] == "Rabbit Story"
 
 
-# # =========================================================
-# # EMPTY LIST SHOULD STILL BE VALID
-# # =========================================================
+# =========================================================
+# EMPTY LIST SHOULD STILL BE VALID
+# =========================================================
 
-# def test_get_all_stories_empty_list():
+def test_get_all_stories_empty_list():
 
-#     with patch(
-#         "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_instance = MagicMock()
-#         mock_instance.read_file.return_value = []
+        mock_instance = MagicMock()
+        mock_instance.read_file.return_value = []
 
-#         mock_reader.return_value = mock_instance
+        mock_reader.return_value = mock_instance
 
-#         repo = GetAllTokenizedStories()
+        repo = GetAllTokenizedStories()
 
-#         result = repo.get_all_stories()
+        result = repo.get_all_stories()
 
-#         assert result == []
-#         assert len(result) == 0
+        assert result == []
+        assert len(result) == 0
 
 
-# # =========================================================
-# # NONE RETURNED
-# # =========================================================
+# =========================================================
+# NONE RETURNED
+# =========================================================
 
-# def test_get_all_stories_none_data():
+def test_get_all_stories_none_data():
 
-#     with patch(
-#         "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_instance = MagicMock()
-#         mock_instance.read_file.return_value = None
+        mock_instance = MagicMock()
+        mock_instance.read_file.return_value = None
 
-#         mock_reader.return_value = mock_instance
+        mock_reader.return_value = mock_instance
 
-#         repo = GetAllTokenizedStories()
+        repo = GetAllTokenizedStories()
 
-#         with pytest.raises(ValueError) as exc_info:
-#             repo.get_all_stories()
+        with pytest.raises(ValueError) as exc_info:
+            repo.get_all_stories()
 
-#         assert "Tokenized stories file is empty" in str(exc_info.value)
+        assert "Tokenized stories file is empty" in str(exc_info.value)
 
 
-# # =========================================================
-# # FILE NOT FOUND
-# # =========================================================
+# =========================================================
+# FILE NOT FOUND
+# =========================================================
 
-# def test_get_all_stories_file_not_found():
+def test_get_all_stories_file_not_found():
 
-#     with patch(
-#         "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_instance = MagicMock()
+        mock_instance = MagicMock()
 
-#         mock_instance.read_file.side_effect = FileNotFoundError()
+        mock_instance.read_file.side_effect = FileNotFoundError()
 
-#         mock_reader.return_value = mock_instance
+        mock_reader.return_value = mock_instance
 
-#         repo = GetAllTokenizedStories()
+        repo = GetAllTokenizedStories()
 
-#         with pytest.raises(FileNotFoundError) as exc_info:
-#             repo.get_all_stories()
+        with pytest.raises(FileNotFoundError) as exc_info:
+            repo.get_all_stories()
 
-#         assert "tokenized_stories.json not found" in str(exc_info.value)
+        assert "tokenized_stories.json not found" in str(exc_info.value)
 
 
-# # =========================================================
-# # INVALID JSON
-# # =========================================================
+# =========================================================
+# INVALID JSON
+# =========================================================
 
-# def test_get_all_stories_invalid_json():
+def test_get_all_stories_invalid_json():
 
-#     with patch(
-#         "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_instance = MagicMock()
+        mock_instance = MagicMock()
 
-#         mock_instance.read_file.side_effect = json.JSONDecodeError(
-#             "Invalid JSON",
-#             doc="",
-#             pos=0
-#         )
+        mock_instance.read_file.side_effect = json.JSONDecodeError(
+            "Invalid JSON",
+            doc="",
+            pos=0
+        )
 
-#         mock_reader.return_value = mock_instance
+        mock_reader.return_value = mock_instance
 
-#         repo = GetAllTokenizedStories()
+        repo = GetAllTokenizedStories()
 
-#         with pytest.raises(ValueError) as exc_info:
-#             repo.get_all_stories()
+        with pytest.raises(ValueError) as exc_info:
+            repo.get_all_stories()
 
-#         assert "Invalid JSON format in tokenized stories file" in str(exc_info.value)
+        assert "Invalid JSON format in tokenized stories file" in str(exc_info.value)
 
 
-# # =========================================================
-# # UNEXPECTED ERROR
-# # =========================================================
+# =========================================================
+# UNEXPECTED ERROR
+# =========================================================
 
-# def test_get_all_stories_unexpected_exception():
+def test_get_all_stories_unexpected_exception():
 
-#     with patch(
-#         "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_instance = MagicMock()
+        mock_instance = MagicMock()
 
-#         mock_instance.read_file.side_effect = Exception("Unexpected Error")
+        mock_instance.read_file.side_effect = Exception("Unexpected Error")
 
-#         mock_reader.return_value = mock_instance
+        mock_reader.return_value = mock_instance
 
-#         repo = GetAllTokenizedStories()
+        repo = GetAllTokenizedStories()
 
-#         with pytest.raises(Exception) as exc_info:
-#             repo.get_all_stories()
+        with pytest.raises(Exception) as exc_info:
+            repo.get_all_stories()
 
-#         assert "Unexpected Error" in str(exc_info.value)
+        assert "Unexpected Error" in str(exc_info.value)
 
 
-# # =========================================================
-# # VERIFY FILE NAME PASSED CORRECTLY
-# # =========================================================
+# =========================================================
+# VERIFY FILE NAME PASSED CORRECTLY
+# =========================================================
 
-# def test_correct_file_name_used():
+def test_correct_file_name_used():
 
-#     with patch(
-#         "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_instance = MagicMock()
-#         mock_instance.read_file.return_value = []
+        mock_instance = MagicMock()
+        mock_instance.read_file.return_value = []
 
-#         mock_reader.return_value = mock_instance
+        mock_reader.return_value = mock_instance
 
-#         repo = GetAllTokenizedStories()
+        repo = GetAllTokenizedStories()
 
-#         repo.get_all_stories()
+        repo.get_all_stories()
 
-#         mock_reader.assert_called_once_with(
-#             "tokenized_stories.json"
-#         )
+        mock_reader.assert_called_once_with(
+            "tokenized_stories.json"
+        )
 
 
-# # =========================================================
-# # LARGE DATASET
-# # =========================================================
+# =========================================================
+# LARGE DATASET
+# =========================================================
 
-# def test_large_dataset():
+def test_large_dataset():
 
-#     mock_data = []
+    mock_data = []
 
-#     for i in range(1000):
-#         mock_data.append({
-#             "_id": str(i),
-#             "title": f"Story {i}"
-#         })
+    for i in range(1000):
+        mock_data.append({
+            "_id": str(i),
+            "title": f"Story {i}"
+        })
 
-#     with patch(
-#         "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_instance = MagicMock()
-#         mock_instance.read_file.return_value = mock_data
+        mock_instance = MagicMock()
+        mock_instance.read_file.return_value = mock_data
 
-#         mock_reader.return_value = mock_instance
+        mock_reader.return_value = mock_instance
 
-#         repo = GetAllTokenizedStories()
+        repo = GetAllTokenizedStories()
 
-#         result = repo.get_all_stories()
+        result = repo.get_all_stories()
 
-#         assert len(result) == 1000
-#         assert result[500]["title"] == "Story 500"
+        assert len(result) == 1000
+        assert result[500]["title"] == "Story 500"
 
 
-# # =========================================================
-# # RETURN TYPE VALIDATION
-# # =========================================================
+# =========================================================
+# RETURN TYPE VALIDATION
+# =========================================================
 
-# def test_return_type_is_list():
+def test_return_type_is_list():
 
-#     mock_data = [
-#         {
-#             "_id": "1",
-#             "title": "Test"
-#         }
-#     ]
+    mock_data = [
+        {
+            "_id": "1",
+            "title": "Test"
+        }
+    ]
 
-#     with patch(
-#         "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_instance = MagicMock()
-#         mock_instance.read_file.return_value = mock_data
+        mock_instance = MagicMock()
+        mock_instance.read_file.return_value = mock_data
 
-#         mock_reader.return_value = mock_instance
+        mock_reader.return_value = mock_instance
 
-#         repo = GetAllTokenizedStories()
+        repo = GetAllTokenizedStories()
 
-#         result = repo.get_all_stories()
+        result = repo.get_all_stories()
 
-#         assert isinstance(result, list)
+        assert isinstance(result, list)
 
 
-# # =========================================================
-# # STORY OBJECT STRUCTURE
-# # =========================================================
+# =========================================================
+# STORY OBJECT STRUCTURE
+# =========================================================
 
-# def test_story_contains_required_fields():
+def test_story_contains_required_fields():
 
-#     mock_data = [
-#         {
-#             "_id": "1",
-#             "title": "Test Story"
-#         }
-#     ]
+    mock_data = [
+        {
+            "_id": "1",
+            "title": "Test Story"
+        }
+    ]
 
-#     with patch(
-#         "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
-#     ) as mock_reader:
+    with patch(
+        "repository.file_system.get_all_tokenized_stories_learnsanskrit.FileSystemReader"
+    ) as mock_reader:
 
-#         mock_instance = MagicMock()
-#         mock_instance.read_file.return_value = mock_data
+        mock_instance = MagicMock()
+        mock_instance.read_file.return_value = mock_data
 
-#         mock_reader.return_value = mock_instance
+        mock_reader.return_value = mock_instance
 
-#         repo = GetAllTokenizedStories()
+        repo = GetAllTokenizedStories()
 
-#         result = repo.get_all_stories()
+        result = repo.get_all_stories()
 
-#         story = result[0]
+        story = result[0]
 
-#         assert "_id" in story
-#         assert "title" in story
+        assert "_id" in story
+        assert "title" in story
 
