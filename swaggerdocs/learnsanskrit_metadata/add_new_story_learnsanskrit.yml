@@ -9,8 +9,8 @@ description: >
   ⚠️ This endpoint triggers the Sanskrit tokenization pipeline and stores
   the processed story into the tokenized collection (MongoDB).
 
-security:
-  - Bearer: []
+# security:
+#   - Bearer: []
 
 parameters:
   - name: story_id

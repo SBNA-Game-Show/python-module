@@ -10,8 +10,8 @@ description: >
   ⚠️ This endpoint retrieves all required fable information from LearnSanskrit.cc categories,
   converts it into the fable category, and stores it in MongoDB.
 
-security:
-  - Bearer: []
+# security:
+#   - Bearer: []
 
 parameters:
   - name: workflow_example
