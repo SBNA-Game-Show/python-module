@@ -1,98 +1,79 @@
-# import pytest
-# from unittest.mock import patch
+from unittest.mock import patch
+from services.tokenized_data_service import RetrieveTokenizedStories
 
-# from services.retrieve_all_tokenized_stories import RetrieveTokenizedStories
+# =========================================================
+# SUCCESS CASE
+# =========================================================
 
+@patch("services.tokenized_data_service.GetAllTokenizedStoriesFromMongoDB")
+def test_get_all_success(mock_repo):
 
-# def test_get_all_success():
+    mock_data = [
+        {"_id": "1", "title": "Rabbit Story"}
+    ]
 
-#     mock_data = [
-#         {
-#             "_id": "1",
-#             "title": "Rabbit Story"
-#         }
-#     ]
+    mock_repo.return_value.get_all.return_value = {
+        "success": True,
+        "count": 1,
+        "data": mock_data
+    }
 
-#     with patch(
-#         "services.retrieve_all_tokenized_stories.GetAllTokenizedStories"
-#     ) as mock_repo:
+    service = RetrieveTokenizedStories()
+    result = service.get_all()
 
-#         mock_repo.return_value.get_all_stories.return_value = mock_data
+    assert result["success"] is True
+    assert result["data"] == mock_data
+    
+    
+# =========================================================
+# EMPTY LIST
+# =========================================================
+@patch("services.tokenized_data_service.GetAllTokenizedStoriesFromMongoDB")
+def test_get_all_empty_data(mock_repo):
 
-#         service = RetrieveTokenizedStories()
+    mock_repo.return_value.get_all.return_value = {
+        "success": True,
+        "count": 0,
+        "data": []
+    }
 
-#         result = service.get_all()
+    service = RetrieveTokenizedStories()
+    result = service.get_all()
 
-#         assert result["success"] is True
-#         assert result["data"] == mock_data
-#         assert len(result["data"]) == 1
+    assert result["success"] is True
+    assert result["data"] == []
+    
+# =========================================================
+# FIle Not Found
+# =========================================================
+@patch("services.tokenized_data_service.GetAllTokenizedStoriesFromMongoDB")
+def test_get_all_file_not_found(mock_repo):
 
+    mock_repo.return_value.get_all.side_effect = FileNotFoundError(
+        "tokenized_stories.json not found"
+    )
 
-# def test_get_all_empty_data():
+    service = RetrieveTokenizedStories()
+    result = service.get_all()
 
-#     with patch(
-#         "services.retrieve_all_tokenized_stories.GetAllTokenizedStories"
-#     ) as mock_repo:
+    assert result["success"] is False
+    assert "not found" in result["message"]
+    
+# =========================================================
+# Unexpected Exception
+# =========================================================
 
-#         mock_repo.return_value.get_all_stories.return_value = []
+@patch("services.tokenized_data_service.GetAllTokenizedStoriesFromMongoDB")
+def test_get_all_unexpected_exception(mock_repo):
 
-#         service = RetrieveTokenizedStories()
+    mock_repo.return_value.get_all.side_effect = Exception("Unexpected Error")
 
-#         result = service.get_all()
+    service = RetrieveTokenizedStories()
+    result = service.get_all()
 
-#         assert result["success"] is True
-#         assert result["data"] == []
-
-
-# def test_get_all_file_not_found():
-
-#     with patch(
-#         "services.retrieve_all_tokenized_stories.GetAllTokenizedStories"
-#     ) as mock_repo:
-
-#         mock_repo.return_value.get_all_stories.side_effect = (
-#             FileNotFoundError("tokenized_stories.json not found")
-#         )
-
-#         service = RetrieveTokenizedStories()
-
-#         result = service.get_all()
-
-#         assert result["success"] is False
-#         assert "not found" in result["message"]
-
-
-# def test_get_all_invalid_json():
-
-#     with patch(
-#         "services.retrieve_all_tokenized_stories.GetAllTokenizedStories"
-#     ) as mock_repo:
-
-#         mock_repo.return_value.get_all_stories.side_effect = (
-#             ValueError("Invalid JSON format")
-#         )
-
-#         service = RetrieveTokenizedStories()
-
-#         result = service.get_all()
-
-#         assert result["success"] is False
-#         assert "Invalid JSON" in result["message"]
+    assert result["success"] is False
+    assert result["message"] == "Unexpected Error"
+    
+    
 
 
-# def test_get_all_unexpected_exception():
-
-#     with patch(
-#         "services.retrieve_all_tokenized_stories.GetAllTokenizedStories"
-#     ) as mock_repo:
-
-#         mock_repo.return_value.get_all_stories.side_effect = (
-#             Exception("Unexpected Error")
-#         )
-
-#         service = RetrieveTokenizedStories()
-
-#         result = service.get_all()
-
-#         assert result["success"] is False
-#         assert result["message"] == "Unexpected Error"
