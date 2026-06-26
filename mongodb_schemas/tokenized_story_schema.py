@@ -42,9 +42,12 @@ story_validator = {
                 }
             },
 
-            "storyMoral": {
-                "bsonType": "string"
-            },
+"storyMoral": {
+    "bsonType": "array",
+    "items": {
+        "bsonType": "string"
+    }
+},
 
             "englishVersion": {
                 "bsonType": "string"
