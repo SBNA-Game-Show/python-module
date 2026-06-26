@@ -17,5 +17,7 @@ pymongo
 pymupdf
 pytesseract 
 pillow
+PyCDSL
+cmd2==0.9.23
 
 
