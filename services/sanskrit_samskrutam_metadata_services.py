@@ -5,7 +5,7 @@ def retrieve_all():
         try:
            
             req = GetUnusedStories()
-            data = req.execute()
+            data = req.get_all()
             
             return{
                 "success":True,
