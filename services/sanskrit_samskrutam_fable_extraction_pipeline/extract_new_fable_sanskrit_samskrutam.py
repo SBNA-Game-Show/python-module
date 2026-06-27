@@ -6,8 +6,9 @@ from services.tokenize_sanskrit_passage import TokenizeSanskritVersion
 from services.extract_english_synonym_antonym import ExtractEnglishSynonymAntonym
 from services.extract_definitions_english_words import ExtractDefinitions
 from services.clean_tokenized_english_words_array import CleanEnglishTokenizedData
+from repository.learnsanskrit_metadata_repo import WriteTokenizedStoryToMongoDB
+from repository.sanskrit_samskrutam_metadata_repo import UpdateStoryToUsed
 
-from utils.file_system_writer import WriteToFileSystem
 
 class ExtractNewFable:
     def __init__(self,storyId):
@@ -37,8 +38,15 @@ class ExtractNewFable:
         eng_def_added = self._add_english_definitions(eng_grammar_added)
         ## 7. Clean English Tokenized Array
         cleaned_data = self._clean_eng_data(eng_def_added)
-        ##8. Write to File System
-        writer = self._write_to_file(cleaned_data)
+        cleaned_data["_id"] = self.storyId
+        ##8. Write to Mongo DB
+        result = self._write_to_db(cleaned_data)
+        
+        if result is None:
+            return "Internal Server Error"
+        
+        updater = self._update_meta_data(self.storyId)
+     
         
         return {
             "success": True,
@@ -78,8 +86,15 @@ class ExtractNewFable:
         req = CleanEnglishTokenizedData(data)
         return req.execute()
     
-    def _write_to_file(self,data):
-        return WriteToFileSystem("Samskrutam_story.json", data)
+    def _write_to_db(self,data):
+        req = WriteTokenizedStoryToMongoDB(data)
+        return req.save_story()
+    
+    def _update_meta_data(self,storyId):
+        req = UpdateStoryToUsed(storyId)
+        return req.update()
+        
+        
     
     
     
