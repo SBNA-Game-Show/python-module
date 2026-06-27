@@ -1,35 +1,32 @@
 from bs4 import BeautifulSoup
 import requests
-import time
-import json
-from uuid import uuid4
-from datetime import datetime
-
-class RetrieveMetaData:
-    def __init__(self):
-        self.url_block1 = "https://sanskrit.samskrutam.com/en.literature-stories-01.ashx"
-        self.url_block2 = "https://sanskrit.samskrutam.com/en.literature-stories-02.ashx"
+class RetrieveRawData:
+    def __init__(self, url):
+        self.url = url
         self.headers = {
-                "User-Agent": "Mozilla/5.0",
-    "Accept": "text/html,application/xhtml+xml",
-    "Referer": "https://sanskrit.samskrutam.com/"
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "text/html,application/xhtml+xml",
+            "Referer": "https://sanskrit.samskrutam.com/"
         }
-        
-        
-    def _send_Request(self,url):
+
+        self.data = self.get_data()   # store result
+
+    def get_data(self):
+        raw_data = self._send_Request(self.url)
+        data = self._get_data(raw_data)
+        return data
+
+    def _send_Request(self, url):
         session = requests.Session()
         session.headers.update(self.headers)
-        
-        text = session.get(url)
-        
-        return text
-    
-    def _get_data(self, raw_data):
-        soup = BeautifulSoup(raw_data,"html.parser")
-        data = soup.find("div",id="PageContentDiv")
-        
-        return data
-    
-    def _parse_data(self, data):
-        
+
+        response = session.get(url)
+        response.raise_for_status()
+
+        return response.text          # return HTML string
+
+    def _get_data(self, raw_html):
+        soup = BeautifulSoup(raw_html, "html.parser")
+        return soup.find("div", id="PageContentDiv")
+      
         
