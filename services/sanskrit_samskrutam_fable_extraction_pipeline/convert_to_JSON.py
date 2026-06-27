@@ -1,7 +1,7 @@
 import re
 
 
-class ExtractData:
+class NormalizeData:
     """
     Given raw data, extracts Sanskrit and English parts.
     """
