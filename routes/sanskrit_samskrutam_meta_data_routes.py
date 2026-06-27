@@ -1,0 +1,18 @@
+from flask import Blueprint
+from flasgger import swag_from
+
+
+from controller.story_data_sanskrit_samskrutam_controller import write_meta_data, retrieve_all_unused,add_new_story
+
+
+san_samskrutam_meta_bp = Blueprint("san_samskrutam_meta_bp",__name__)
+
+
+meta_data_controller = swag_from("../swaggerdocs/sanskrit_samskrutam_meta/add_metadata.yml")(write_meta_data)
+san_samskrutam_meta_bp.route("/writeMetaData",methods=["POST"])(meta_data_controller)
+
+retrieve_all_unused_controller = swag_from("../swaggerdocs/sanskrit_samskrutam_meta/get_available_story_data.yml")(retrieve_all_unused)
+san_samskrutam_meta_bp.route("/getUnused",methods=["GET"])(retrieve_all_unused_controller)
+
+add_new_story_controller = swag_from("../swaggerdocs/sanskrit_samskrutam_meta/add_new_story.yml")(add_new_story)
+san_samskrutam_meta_bp.route("/addNewStory", methods=["POST"])(add_new_story_controller)

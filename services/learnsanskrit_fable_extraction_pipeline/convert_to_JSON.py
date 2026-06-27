@@ -44,12 +44,17 @@ class ExtractDataFromLearnSanskrit:
         title.replace(" ","")
         return title.split(", ")
     
+    # def extract_moral(self):
+    #     """Extracting Moral from Fable"""
+    #     title_data = self.data['data']['summary_head']
+    #     story_moral = title_data[1]
+    #     story_moral.replace("(","")
+    #     story_moral.replace(")","")
+    #     return story_moral
     def extract_moral(self):
-        """Extracting Moral from Fable"""
         title_data = self.data['data']['summary_head']
         story_moral = title_data[1]
-        story_moral.replace("(","")
-        story_moral.replace(")","")
+        story_moral = story_moral.replace("(", "").replace(")", "")
         return story_moral
     
     def extract_english_version_story(self):
@@ -129,7 +134,7 @@ class ExtractDataFromLearnSanskrit:
                 "sanskritversion": self.sanskrit_title
             },
             "actors": self.actors,
-            "storyMoral": self.moral,
+            "storyMoral": [self.moral],
             "englishVersion": self.english_version,
             "transliteratedVersion": self.transliterated_version,
             "sanskritVersion": self.sanskrit_version
