@@ -5,7 +5,7 @@ import os
 
 class UpdateStoryDataUsedStatus:
 
-    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     file_path = os.path.join(BASE_DIR, "data", "stories_data.json")
 
     def __init__(self, story_identifier, used=True):
@@ -28,6 +28,10 @@ class UpdateStoryDataUsedStatus:
 
         # Iterate through story categories (Aesop, Panchatantra, etc.)
         for category in data:
+            
+            if not isinstance(category,dict):
+                continue
+            
             stories = category.get("story_description", [])
 
             # Iterate through individual nested story objects
