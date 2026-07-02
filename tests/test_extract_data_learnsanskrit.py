@@ -102,7 +102,7 @@ class TestExtractDataFromLearnSanskrit:
                 "Lion",
                 "Mouse"
             ],
-            "storyMoral": "Kindness is rewarded",
+            "storyMoral": ["Kindness is rewarded"],
             "englishVersion": "A lion once spared a mouse.",
             "transliteratedVersion": [
                 "siṃhaḥ mūṣakaḥ"
