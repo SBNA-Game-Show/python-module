@@ -23,7 +23,7 @@ story_validator = {
                 "bsonType": "object",
                 "required": [
                     "englishversion",
-                    "sanskritversion"
+                    "sanskritVersion"
                 ],
                 "properties": {
                     "englishversion": {
