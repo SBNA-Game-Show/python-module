@@ -8,6 +8,7 @@ from config.envconfig import PORT,DEBUG
 from config.dbconfig import connect_db
 from middleware.error_handler import (register_error_handlers)
 from config.swagger_config import SWAGGER_CONFIG,SWAGGER_TEMPLATE
+from nlp.dharmamitra_loader import load_dharmamitra_model
 
 from routes.tokenized_data_routes import tokenize_data_bp
 from routes.learnsanskrit_meta_data_routes import story_data_bp
@@ -58,8 +59,10 @@ register_error_handlers(app)
 
 
 
-if __name__ == '__main__':
-       app.run(
+if __name__ == '__main__':    
+    load_dharmamitra_model()
+    
+    app.run(
         host="0.0.0.0",
         port=PORT,
         debug=DEBUG,
