@@ -73,19 +73,6 @@ class FetchNewFable:
         
         updater = self._update_story_toDB(self.story_id)
         
-        # Writes to the file system 
-                # 1. Fetch metadata
-        # #Fetching from file system
-        # story_data = self._get_story_data(story_id)   
-        # # 4. Load / Persist
-        # write_success = self._write_to_file_system(final_version)
-        # if not write_success:
-        #     raise IOError("Failed writing tokenized story")
-       
-        # # 5. DB Updates
-        # update_status = self._update_story_status(story_id)
-        # if not update_status.get("success"):
-        #     raise ValueError(update_status.get("message"))
             
         return {
             "success": True,

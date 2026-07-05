@@ -53,13 +53,6 @@ story_validator = {
                 "bsonType": "string"
             },
 
-            "transliteratedVersion": {
-                "bsonType": "array",
-                "items": {
-                    "bsonType": "string"
-                }
-            },
-
             "sanskritVersion": {
                 "bsonType": "array",
                 "items": {

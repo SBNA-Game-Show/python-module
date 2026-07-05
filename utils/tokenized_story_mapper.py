@@ -19,10 +19,6 @@ class TokenizedStoryMapper:
 
             "englishVersion": story_data.get("englishVersion", ""),
 
-            "transliteratedVersion": story_data.get(
-                "transliteratedVersion",
-                []
-            ),
 
             "sanskritVersion": story_data.get(
                 "sanskritVersion",
