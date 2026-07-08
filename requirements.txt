@@ -4,7 +4,6 @@ beautifulsoup4
 requests
 urllib3
 spacy
-stanza
 transformers
 torch
 dnspython
@@ -17,11 +16,8 @@ pymongo
 pymupdf
 pytesseract 
 pillow
-PyCDSL
-cmd2<2
 dharmamitra-sanskrit-grammar==0.1.7
 indic-transliteration
-pandas
-sanskrit_util
+
 
 

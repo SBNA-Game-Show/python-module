@@ -34,16 +34,16 @@ def home():
     prod_url = f"{request.host_url.rstrip('/')}/api-docs"
     return render_template("index.html",prod_url=prod_url)
     
-@app.route("/debug/files")
-def debug_files():
-    import os
+# @app.route("/debug/files")
+# def debug_files():
+#     import os
 
-    return {
-            "app_exists": os.path.exists("/app"),
-            "data_exists": os.path.exists("/app/data"),
-            "files": os.listdir("/app"),
-            "data_files": os.listdir("/app/data") if os.path.exists("/app/data") else []
-        }
+#     return {
+#             "app_exists": os.path.exists("/app"),
+#             "data_exists": os.path.exists("/app/data"),
+#             "files": os.listdir("/app"),
+#             "data_files": os.listdir("/app/data") if os.path.exists("/app/data") else []
+#         }
 
 app.register_blueprint(story_data_bp,url_prefix = BASE_URL)
 app.register_blueprint(tokenize_data_bp,url_prefix=BASE_URL)

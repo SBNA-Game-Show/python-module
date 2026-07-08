@@ -4,7 +4,6 @@ beautifulsoup4
 requests
 urllib3
 spacy
-stanza
 dnspython
 python-dotenv
 pydantic
