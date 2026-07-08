@@ -10,3 +10,5 @@ ATLAS_URI = os.getenv("ATLAS_URI")
 
 if not ATLAS_URI:
     raise ValueError("ATLAS_URI is not configured")
+
+HF_TOKEN = os.getenv("HF_TOKEN")

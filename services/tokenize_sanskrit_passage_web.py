@@ -29,6 +29,7 @@ class TokenizeSanskritPassageWeb:
             raise RuntimeError(f"Request failed with status code {response.status_code}: {response.text}")
         
         raw_data = self._extract_data(response)
+        print(raw_data)
         
         tokenized_data = self.parser.extract(raw_data)
         cleaned_data = self._remove_duplicates(tokenized_data)
@@ -141,41 +142,40 @@ class TokenizeSanskritPassageWeb:
 
         return full_text
     
-    def _remove_duplicates(self,data):
-        cleaned_array =[]
+    def _remove_duplicates(self, data):
+        cleaned_array = []
         unique_words = set()
-        
+
         for item in data:
             word = item["text"]
-            
-        if word not in unique_words:
-            unique_words.add(word)
-            cleaned_array.append(item)
-            
+
+            if word not in unique_words:
+                unique_words.add(word)
+                cleaned_array.append(item)
 
         return cleaned_array
     
-    def _convert_to_devnagari(self,data):
-        final_array =[]
-        
+    def _convert_to_devnagari(self, data):
+        final_array = []
+
         for item in data:
             text = item["text"]
             lemma = item["lemma"]
-            
-        text_converter = TransliterateToSanskrit(text)
-        devanagari_text = text_converter.translate()
-        
-        lemma_converter = TransliterateToSanskrit(lemma)
-        devanagari_lemma = lemma_converter.translate()
-        
-        final_array.append({
-            "text":devanagari_text,
-            "lemma": devanagari_lemma,
-            "upos":item["upos"],
-            "features":item["features"],
-            "definition":item["definition"]
-        })
-        
+
+            text_converter = TransliterateToSanskrit(text)
+            devanagari_text = text_converter.translate()
+
+            lemma_converter = TransliterateToSanskrit(lemma)
+            devanagari_lemma = lemma_converter.translate()
+
+            final_array.append({
+                "text": devanagari_text,
+                "lemma": devanagari_lemma,
+                "upos": item["upos"],
+                "features": item["features"],
+                "definition": item.get("definition")
+            })
+
         return final_array
     
     

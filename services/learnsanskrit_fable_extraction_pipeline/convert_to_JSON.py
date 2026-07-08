@@ -93,8 +93,8 @@ class ExtractDataFromLearnSanskrit:
     def get_json_data(self):
         return {
             "title": {
-                "englishversion": self.english_title,
-                "sanskritversion": self.sanskrit_title
+                "englishVersion": self.english_title,
+                "sanskritVersion": self.sanskrit_title
             },
             "actors": self.actors,
             "storyMoral": [self.moral],
