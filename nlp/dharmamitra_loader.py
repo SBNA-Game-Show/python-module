@@ -1,8 +1,9 @@
 import os
 import torch
 from transformers import AutoTokenizer, T5ForConditionalGeneration
+from config.envconfig import HF_TOKEN
 
-os.environ["HF_TOKEN"] = "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"
+os.environ["HF_TOKEN"] = HF_TOKEN
 
 model_name = "chronbmm/sanskrit5-multitask"
 
