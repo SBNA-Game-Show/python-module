@@ -1,0 +1,124 @@
+Tokenize Sanskrit Passage
+---
+tags:
+  - Dictionary Routes
+
+summary: Tokenizes a given Sanskrit Passage.
+
+description: |
+  Given a Sanskrit Passage, this endpoint:
+
+  - Accepts a list of Sanskrit sentences in Devanagari script.
+  - Extracts word segmentation, lemma, part of speech (POS), and grammatical features using Dharmamitra Model.
+  - Returns the original Sanskrit passage along with tokenized Sanskrit word metadata.
+
+consumes:
+  - application/json
+
+produces:
+  - application/json
+
+parameters:
+  - in: body
+    name: sanskritPassage
+    required: true
+    schema:
+      type: array
+      items:
+        type: string
+      example:
+        - "शशकः नकुलः मार्जारी च"
+        - "एकदिने गृहात् प्रस्थितः एकः शशकः स्वादुं तृणं खादितुम् अगच्छत् ।"
+
+responses:
+
+  200:
+    description: Sanskrit passage tokenized successfully
+    schema:
+      type: object
+      properties:
+
+        success:
+          type: boolean
+          example: true
+
+        message:
+          type: string
+          example: Sanskrit passage tokenized successfully
+
+        data:
+          type: object
+          properties:
+
+            sanskritVersion:
+              type: array
+              description: Original Sanskrit sentences provided by the user
+              items:
+                type: string
+              example:
+                - "शशकः नकुलः मार्जारी च"
+                - "एकदिने गृहात् प्रस्थितः एकः शशकः स्वादुं तृणं खादितुम् अगच्छत् ।"
+
+            tokenized_sanskrit_version:
+              type: array
+              description: Tokenized Sanskrit words with linguistic metadata
+              items:
+                type: object
+                properties:
+
+                  text:
+                    type: string
+                    description: Sanskrit word in Devanagari
+                    example: "शशकः"
+
+                  lemma:
+                    type: string
+                    description: Base form of the word
+                    example: "शशक"
+
+                  upos:
+                    type: string
+                    description: Universal POS tag
+                    example: "NOUN"
+
+                  features:
+                    type: string
+                    description: Morphological features
+                    example: "Case=Nom|Gender=Masc|Number=Sing"
+
+                  definition:
+                    type: string
+                    description: English meaning where available
+                    example: "hare"
+
+
+  400:
+    description: Invalid Sanskrit passage input
+    schema:
+      type: object
+      properties:
+
+        success:
+          type: boolean
+          example: false
+
+        message:
+          type: string
+          examples:
+            - Sanskrit passage is required
+            - Expected JSON array of Sanskrit sentences
+
+
+  500:
+    description: Internal server error during Sanskrit tokenization
+    schema:
+      type: object
+      properties:
+
+        success:
+          type: boolean
+          example: false
+
+        message:
+          type: string
+          example: Failed to tokenize Sanskrit passage
