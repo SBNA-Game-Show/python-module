@@ -1,0 +1,61 @@
+type: array
+
+items:
+  type: object
+
+  required:
+    - englishTitle
+    - sanskritTitle
+    - englishPassage
+    - sanskritPassage
+
+  properties:
+    englishTitle:
+      type: string
+      example: "rabbit, weasel, cat"
+
+    sanskritTitle:
+      type: string
+      example: "शशकः नकुलः मार्जारी च"
+
+    englishPassage:
+      type: string
+      example: >
+        When the rabbit left his home, a weasel moved in and refused
+        to move out again. A great dispute arose over this.
+        When the cat heard this, she offered to pacify the dispute.
+
+    sanskritPassage:
+      type: array
+      items:
+        type: string
+      example:
+        - "शशकः नकुलः मार्जारी च"
+        - "एकदिने गृहात् प्रस्थितः एकः शशकः स्वादुं तृणं खादितुम् अगच्छत् ।"
+        - "परन्तु गृहस्य पिधानं कर्तुं सः विस्मृतवान् ।"
+        - "यदा शशकः गृहे न आसीत् तदा एकः नकुलः तत्र आगत्य शशकस्य गृहं प्रविष्टवान् ।"
+
+example:
+  - englishTitle: "rabbit, weasel, cat"
+    sanskritTitle: "शशकः नकुलः मार्जारी च"
+    englishPassage: >
+      When the rabbit left his home, a weasel moved in and refused
+      to move out again. A great dispute arose over this.
+      When the cat heard this, she offered to pacify the dispute.
+    sanskritPassage:
+      - "शशकः नकुलः मार्जारी च"
+      - "एकदिने गृहात् प्रस्थितः एकः शशकः स्वादुं तृणं खादितुम् अगच्छत् ।"
+      - "परन्तु गृहस्य पिधानं कर्तुं सः विस्मृतवान् ।"
+
+  - englishTitle: "monkey and wedge"
+    sanskritTitle: "स एव निधनं यति कीलोत्पाटीव वानरः"
+
+    englishPassage: >
+      Near the city limits, a temple was being built by the son of a
+      business man. One day a group of monkeys came there and one
+      monkey tried to remove a wedge from a log.
+
+    sanskritPassage:
+      - "स एव निधनं यति कीलोत्पाटीव वानरः ।"
+      - "कसिंमश्चिन्नगराभ्याशे केनापि वणिक्पुत्रेण तरुषण्डमध्ये देवतायतनं कर्तुमारब्धम् ।"
+      - "तत्र च ये कर्मकाराः स्थपत्यादयस्ते मध्याह्नवेलायामाहारार्थ नगरमध्ये गच्छन्ति ।"

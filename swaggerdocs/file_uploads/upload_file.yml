@@ -34,6 +34,10 @@ parameters:
     enum: [english, sanskrit]
     description: Language of the document to guide tokenization pipeline
 
+schema:
+  - name:JSON Schema
+   $ref: '#/definitions/SingleStoryJSON'
+
 responses:
   200:
     description: File successfully processed and tokenized
