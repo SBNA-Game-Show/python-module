@@ -39,12 +39,7 @@ class TokenizeSanskritPassageWeb:
         new_data["tokenized_sanskrit_version"] = normalized_data
         
         
-        return new_data
-        
-        
-            
-        
-        
+        return new_data     
     
     
     def _extract_sanskrit_passage(self,data):
