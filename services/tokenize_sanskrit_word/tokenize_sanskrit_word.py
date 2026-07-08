@@ -6,36 +6,12 @@ import re
 class TokenizeSanskritWord:
 
     def __init__(self, word):
+        
+        if not word:
+            raise ValueError("Sanskrit Word is Required")
 
         self.word = word
         self.url = "https://dharmamitra.org/bff/api/translation"
-
-        if not self.is_devanagari(word) and not self.is_iast(word):
-            raise ValueError(
-                f"Unsupported Sanskrit script: {word}"
-            )
-
-
-    def is_devanagari(self, text):
-        """
-        Checks if text contains Devanagari characters
-        """
-        return bool(
-            re.search(r'[\u0900-\u097F]', text)
-        )
-
-
-    def is_iast(self, text):
-        """
-        Checks if text contains IAST transliteration characters
-        """
-        iast_chars = (
-            "āīūṛṝḷḹṅñṭḍṇśṣ"
-            "ĀĪŪṚṜḶḸṄÑṬḌṆŚṢ"
-        )
-
-        return any(char in text for char in iast_chars) or text.isascii()
-
 
     def tokenize(self):
         
@@ -43,7 +19,11 @@ class TokenizeSanskritWord:
         payload = self._create_payload(self.word)
         response = self._send_request(self.url,payload,headers)
         raw_data = self._extract_data(response)
-        return self.word
+        cleaned_data = self._clean_data(raw_data)
+        
+        
+        
+        return cleaned_data
     
     
     def _create_payload(self,data):
@@ -113,3 +93,12 @@ class TokenizeSanskritWord:
                     full_text += obj.get("delta", "")
 
         return full_text
+    
+    def _clean_data(self,data):
+        data = data.replace("*","")
+        data = data.replace("_","")
+        data = data.replace("\n","")
+        data = data.replace("\\",",")
+        data = re.split(r"\.\s*", data)
+        
+        return data

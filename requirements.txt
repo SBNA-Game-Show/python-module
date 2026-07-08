@@ -4,8 +4,6 @@ beautifulsoup4
 requests
 urllib3
 spacy
-transformers
-torch
 dnspython
 pytest
 python-dotenv
@@ -18,6 +16,8 @@ pytesseract
 pillow
 dharmamitra-sanskrit-grammar==0.1.7
 indic-transliteration
+torch
+transformers
 
 
 
