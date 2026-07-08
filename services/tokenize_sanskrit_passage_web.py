@@ -29,7 +29,6 @@ class TokenizeSanskritPassageWeb:
             raise RuntimeError(f"Request failed with status code {response.status_code}: {response.text}")
         
         raw_data = self._extract_data(response)
-        print(raw_data)
         
         tokenized_data = self.parser.extract(raw_data)
         cleaned_data = self._remove_duplicates(tokenized_data)
