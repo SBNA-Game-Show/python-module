@@ -7,7 +7,7 @@ from services.learnsanskrit_fable_extraction_pipeline.extract_data import Retrie
 from services.learnsanskrit_fable_extraction_pipeline.convert_to_JSON import ExtractDataFromLearnSanskrit
 
 from services.tokenize_english_passage import TokenizeEnglishVersion
-from services.tokenize_sanskrit_passage import TokenizeSanskritVersion
+from services.tokenize_sanskrit_passage_web import TokenizeSanskritPassageWeb
 from services.extract_english_synonym_antonym import ExtractEnglishSynonymAntonym
 from services.extract_definitions_english_words import ExtractDefinitions
 
@@ -95,7 +95,7 @@ class FetchNewFable:
         return ExtractEnglishSynonymAntonym(tokenized_english).execute()
         
     def _tokenize_sanskrit_version(self, tokenized_english_with_grammar):
-        return TokenizeSanskritVersion(tokenized_english_with_grammar).tokenize_sanskrit()
+        return TokenizeSanskritPassageWeb(tokenized_english_with_grammar).tokenize()
     
     def _write_to_mongoDB(self, story):
         writer = WriteTokenizedStoryToMongoDB(story)
