@@ -2,7 +2,7 @@ from services.sanskrit_samskrutam_fable_extraction_pipeline.extract_data import 
 from services.sanskrit_samskrutam_fable_extraction_pipeline.convert_to_JSON import NormalizeData
 from repository.sanskrit_samskrutam_metadata_repo import GetStoryDataById
 from services.tokenize_english_passage import TokenizeEnglishVersion
-from services.tokenize_sanskrit_passage import TokenizeSanskritVersion
+from services.tokenize_sanskrit_passage_web import TokenizeSanskritPassageWeb
 from services.extract_english_synonym_antonym import ExtractEnglishSynonymAntonym
 from services.extract_definitions_english_words import ExtractDefinitions
 from services.clean_tokenized_english_words_array import CleanEnglishTokenizedData
@@ -70,8 +70,8 @@ class ExtractNewFable:
         return req.tokenize_english_version()
     
     def _tokenize_sanskrit_version(self,data):
-        req = TokenizeSanskritVersion(data)
-        return req.tokenize_sanskrit()
+        req = TokenizeSanskritPassageWeb(data)
+        return req.tokenize()
     
     def _add_english_grammar(self,data):
         req = ExtractEnglishSynonymAntonym(data)
