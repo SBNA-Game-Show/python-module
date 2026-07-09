@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from flask import jsonify, request
 from werkzeug.utils import secure_filename
+from services.file_upload_services.json_reader import ReadUploadedJSON
 
 BASE_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "data")
@@ -65,7 +66,10 @@ def _determine_service_execution(file_category, filename):
         return "Text document processed successfully"
 
     if file_category == "json":
-        return "JSON file processed successfully"
+        service = ReadUploadedJSON(filename)
+        result = service.execute()
+        
+        return result
 
     return "UNKNOWN FILE TYPE"
 

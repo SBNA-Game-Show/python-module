@@ -34,8 +34,8 @@ class NormalizeData:
         
         return{
             "title":{
-                "english_version":english_title,
-                "sanskrit_version":sanskrit_title,                
+                "englishVersion":english_title,
+                "sanskritVersion":sanskrit_title,                
             },
             "storyMoral":[english_moral,sanskrit_moral],
             "englishVersion":english_passage,

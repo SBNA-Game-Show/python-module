@@ -1,0 +1,56 @@
+Tokenize Sanskrit Word
+---
+tags:
+  - Dictionary Routes
+
+summary: Tokenizes a given Sanskrit word.
+
+description: |
+  Given an Sanskrit word, this endpoint:
+
+  - Extracts the word's part of speech (POS) using Dharmamitra Model.
+  - Returns a JSON object containing the word, its part of speech (`pos`), synonyms, and antonyms.
+
+parameters:
+  - name: word
+    in: query
+    required: true
+    type: string
+    description: Sanskritdoc word to tokenize.
+    example: काकस्य
+
+responses:
+  200:
+    description: Word successfully tokenized.
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+
+  400:
+    description: Invalid request.
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Sanskrit Word is Required
+
+  500:
+    description: Internal server error.
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Internal server error

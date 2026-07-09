@@ -1,0 +1,199 @@
+---
+tags:
+  - Uploads
+
+summary: Upload file to extract and tokenize passage
+
+description: >
+  This endpoint allows an admin to upload a file in one of the supported formats:
+  PDF, JSON, Word, TXT, or Image.
+
+  The system extracts textual content from the uploaded file,
+  converts it into a passage structure, performs tokenization,
+  generates linguistic metadata, and stores the processed result
+  into MongoDB.
+
+  Supported JSON formats:
+    - SingleStoryJSON
+    - MultipleStoryJSON
+
+
+consumes:
+  - multipart/form-data
+
+produces:
+  - application/json
+
+
+parameters:
+
+  - name: file
+    in: formData
+    required: true
+    type: file
+    description: >
+      Upload file:
+      PDF (.pdf),
+      JSON (.json),
+      Word (.docx),
+      TXT (.txt),
+      Image (.png/.jpg/.jpeg)
+
+
+  - name: language
+    in: formData
+    required: false
+    type: string
+    enum:
+      - english
+      - sanskrit
+      - auto
+
+    default: auto
+
+    description: >
+      Optional language hint for extraction and tokenization.
+
+
+responses:
+
+  200:
+
+    description: File successfully processed and tokenized
+
+    schema:
+
+      type: object
+
+      properties:
+
+        success:
+          type: boolean
+          example: true
+
+        message:
+          type: string
+          example: "File processed and stored successfully"
+
+        data:
+
+          type: object
+
+          description: Tokenized output stored in MongoDB
+
+
+
+  400:
+
+    description: Invalid file upload or unsupported format
+
+    schema:
+
+      type: object
+
+      properties:
+
+        success:
+          type: boolean
+          example: false
+
+        message:
+          type: string
+          example: "Unsupported file type"
+
+
+
+  401:
+
+    description: Unauthorized access
+
+    schema:
+
+      type: object
+
+      properties:
+
+        success:
+          type: boolean
+          example: false
+
+        message:
+          type: string
+          example: "Unauthorized"
+
+
+
+  500:
+
+    description: Internal server error during processing pipeline
+
+    schema:
+
+      type: object
+
+      properties:
+
+        success:
+          type: boolean
+          example: false
+
+        message:
+          type: string
+          example: "Failed to process file"
+
+
+
+definitions:
+
+  SingleStoryJSON:
+
+    type: object
+
+    properties:
+
+      englishTitle:
+        type: string
+        example: "rabbit, weasel, cat"
+
+      sanskritTitle:
+        type: string
+        example: "शशकः नकुलः मार्जारी च"
+
+      englishPassage:
+        type: string
+        example: "When the rabbit left his home..."
+
+      sanskritPassage:
+
+        type: array
+
+        items:
+          type: string
+
+
+
+  MultipleStoryJSON:
+
+    type: array
+
+    items:
+
+      type: object
+
+      properties:
+
+        englishTitle:
+          type: string
+
+        sanskritTitle:
+          type: string
+
+        englishPassage:
+          type: string
+
+        sanskritPassage:
+
+          type: array
+
+          items:
+            type: string

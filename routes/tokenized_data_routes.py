@@ -2,14 +2,10 @@ from flask import Blueprint
 from flasgger import swag_from
 
 
-from controller.tokenized_data_learnsanskrit_controller import fetch_all_tokenized_stories,fetch_tokenized_story_by_id,fetch_tokenized_stories_by_category
-
-
+from controller.tokenized_data_learnsanskrit_controller import fetch_all_tokenized_stories,fetch_tokenized_story_by_id,fetch_tokenized_stories_by_category,update_tokenized_story
 
 
 tokenize_data_bp = Blueprint("tokenize_data_bp",__name__)
-
-
 
 
 
@@ -24,3 +20,7 @@ tokenize_data_bp.route("/getTokenizedById",methods=["GET"])(get_tokenized_by_id_
 # Get tokenized stories by category
 get_tokenized_stories_by_category_controller = swag_from("../swaggerdocs/tokenized_data/get_tokenized_stories_by_category.yml")(fetch_tokenized_stories_by_category)
 tokenize_data_bp.route("/getByCategory", methods=["GET"])(get_tokenized_stories_by_category_controller)
+
+# Update tokenized story by id
+update_tokenized_story_controller = swag_from("../swaggerdocs/tokenized_data/update_tokenized_story.yml")(update_tokenized_story)
+tokenize_data_bp.route("/update",methods=["PATCH"])(update_tokenized_story_controller)

@@ -17,7 +17,6 @@ RUN pip install --upgrade pip setuptools wheel && \
 
 # Download spaCy English model
 RUN python -m spacy download en_core_web_sm
-RUN python -c "import stanza; stanza.download('sa')"
 RUN python -m nltk.downloader wordnet
 RUN python -m nltk.downloader omw-1.4
 

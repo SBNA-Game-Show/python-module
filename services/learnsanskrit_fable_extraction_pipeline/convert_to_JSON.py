@@ -15,7 +15,6 @@ class ExtractDataFromLearnSanskrit:
         self.actors = self.extract_actors()
         self.moral = self.extract_moral()
         self.english_version = self.extract_english_version_story()
-        self.transliterated_version = self.extract_transliterated_version_story()
         self.sanskrit_version = self.extract_sanskrit_version_story()
         self.sanskrit_title = self.extracting_sanskrit_version_story_title()
         
@@ -44,13 +43,7 @@ class ExtractDataFromLearnSanskrit:
         title.replace(" ","")
         return title.split(", ")
     
-    # def extract_moral(self):
-    #     """Extracting Moral from Fable"""
-    #     title_data = self.data['data']['summary_head']
-    #     story_moral = title_data[1]
-    #     story_moral.replace("(","")
-    #     story_moral.replace(")","")
-    #     return story_moral
+
     def extract_moral(self):
         title_data = self.data['data']['summary_head']
         story_moral = title_data[1]
@@ -61,36 +54,6 @@ class ExtractDataFromLearnSanskrit:
         """Extracting english version story"""
         return self.data['data']['summary_text']
     
-    
-    def extract_transliterated_version_story(self):
-        """Extracting Transliterd version"""
-        transliterated_version =[]
-        transliterated_texts = self.data["data"]["texts"]
-        
-        for section in transliterated_texts:
-            
-            soup = BeautifulSoup(section,"html.parser")
-            divs = soup.find_all("div")
-            
-            words =[]
-            
-            for div in divs:
-                data = div.get_text(strip=True)
-                data.replace("\n","").replace("","")
-                
-                if data == "":
-                    continue
-                
-                if data.isdigit():
-                    continue
-                
-                words.append(data)
-                
-            if words:
-                transliterated_version.append(" ".join(words))
-            
-        
-        return transliterated_version
     
     def extract_sanskrit_version_story(self):
         """Extracting Transliterd version"""
@@ -130,13 +93,12 @@ class ExtractDataFromLearnSanskrit:
     def get_json_data(self):
         return {
             "title": {
-                "englishversion": self.english_title,
-                "sanskritversion": self.sanskrit_title
+                "englishVersion": self.english_title,
+                "sanskritVersion": self.sanskrit_title
             },
             "actors": self.actors,
             "storyMoral": [self.moral],
             "englishVersion": self.english_version,
-            "transliteratedVersion": self.transliterated_version,
             "sanskritVersion": self.sanskrit_version
         }
         

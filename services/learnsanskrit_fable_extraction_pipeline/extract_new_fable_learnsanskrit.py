@@ -7,7 +7,7 @@ from services.learnsanskrit_fable_extraction_pipeline.extract_data import Retrie
 from services.learnsanskrit_fable_extraction_pipeline.convert_to_JSON import ExtractDataFromLearnSanskrit
 
 from services.tokenize_english_passage import TokenizeEnglishVersion
-from services.tokenize_sanskrit_passage import TokenizeSanskritVersion
+from services.tokenize_sanskrit_passage_web import TokenizeSanskritPassageWeb
 from services.extract_english_synonym_antonym import ExtractEnglishSynonymAntonym
 from services.extract_definitions_english_words import ExtractDefinitions
 
@@ -73,19 +73,6 @@ class FetchNewFable:
         
         updater = self._update_story_toDB(self.story_id)
         
-        # Writes to the file system 
-                # 1. Fetch metadata
-        # #Fetching from file system
-        # story_data = self._get_story_data(story_id)   
-        # # 4. Load / Persist
-        # write_success = self._write_to_file_system(final_version)
-        # if not write_success:
-        #     raise IOError("Failed writing tokenized story")
-       
-        # # 5. DB Updates
-        # update_status = self._update_story_status(story_id)
-        # if not update_status.get("success"):
-        #     raise ValueError(update_status.get("message"))
             
         return {
             "success": True,
@@ -108,7 +95,7 @@ class FetchNewFable:
         return ExtractEnglishSynonymAntonym(tokenized_english).execute()
         
     def _tokenize_sanskrit_version(self, tokenized_english_with_grammar):
-        return TokenizeSanskritVersion(tokenized_english_with_grammar).tokenize_sanskrit()
+        return TokenizeSanskritPassageWeb(tokenized_english_with_grammar).tokenize()
     
     def _write_to_mongoDB(self, story):
         writer = WriteTokenizedStoryToMongoDB(story)

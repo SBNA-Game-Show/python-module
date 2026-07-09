@@ -1,0 +1,111 @@
+tags:
+  - Tokenized Data Routes
+
+summary: Update a tokenized story by ID
+
+description: Updates an existing tokenized story using story_id and request body payload.
+
+parameters:
+  - name: story_id
+    in: query
+    required: true
+    type: string
+    description: Unique ID of the tokenized story
+
+  - name: body
+    in: body
+    required: true
+    description: Tokenized story update payload
+    schema:
+      type: object
+      properties:
+
+        title:
+          type: object
+          properties:
+            englishversion:
+              type: string
+            sanskritversion:
+              type: string
+
+        actors:
+          type: array
+          items:
+            type: string
+
+        storyMoral:
+          type: array
+          items:
+            type: string
+
+        englishVersion:
+          type: string
+
+        sanskritVersion:
+          type: array
+          items:
+            type: string
+
+        category:
+          type: string
+
+        tokenized_english_version:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+              lemma:
+                type: string
+              pos:
+                type: string
+              definition:
+                type: string
+              synonyms:
+                type: array
+                items:
+                  type: string
+              antonyms:
+                type: array
+                items:
+                  type: string
+
+        tokenized_sanskrit_version:
+          type: array
+          items:
+            type: array
+            items:
+              type: object
+              properties:
+                text:
+                  type: string
+                lemma:
+                  type: string
+                upos:
+                  type: string
+                xpos:
+                  type: string
+                  nullable: true
+                feats:
+                  type: string
+
+responses:
+  200:
+    description: Successfully updated tokenized story
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+
+  400:
+    description: Validation error or bad request
+
+  404:
+    description: Story not found
+
+  500:
+    description: Internal server error
