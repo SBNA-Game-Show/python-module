@@ -9,8 +9,8 @@ class TokenizedStoryMapper:
              "_id": story_data.get("_id"),
 
             "title": {
-                "englishversion": story_data.get("title", {}).get("englishversion"),
-                "sanskritversion": story_data.get("title", {}).get("sanskritversion")
+                "englishVersion": story_data.get("title", {}).get("englishVersion"),
+                "sanskritVersion": story_data.get("title", {}).get("sanskritVersion")
             },
 
             "actors": story_data.get("actors", []),

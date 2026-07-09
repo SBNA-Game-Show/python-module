@@ -11,4 +11,7 @@ class ExtractGuruKulaMetaData:
     def execute(self):
         
         categories = ExtractCategory()
+        for category in categories:
+            link = category["category_link"]
+            
         
