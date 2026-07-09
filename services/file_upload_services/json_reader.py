@@ -1,5 +1,5 @@
 import os
-import uuid
+from uuid import uuid4
 
 from utils.file_system_reader import FileSystemReader
 from services.clean_tokenized_english_words_array import CleanEnglishTokenizedData
@@ -71,7 +71,7 @@ class ReadUploadedJSON:
 
     def _normalize_passage(self, data):
         return {
-            "_id": str(uuid.uuid4()),
+            "_id": str(uuid4()),
             "title": {
                 "englishVersion": data["englishTitle"],
                 "sanskritVersion": data["sanskritTitle"],
