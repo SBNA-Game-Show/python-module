@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from services.gurukula.meta_data.send_request import SendRequest
 
 
-class ExtractStroyList:
+class ExtractStoryList:
     def __init__(self, categoryURL):
         if not categoryURL:
             raise ValueError("Category URL Is not Provided to Extract Story List")
