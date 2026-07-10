@@ -64,7 +64,6 @@ class ExtractGuruKulaMetaData:
     def _mapper(self, categories, story_list):
 
         master_data = {
-            "createdAt":datetime.utcnow(),
             "categories":{}
         }
 

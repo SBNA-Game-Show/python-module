@@ -24,6 +24,7 @@ gurukula_metadata_validator = {
                         "category_link",
                         "stories"
                     ],
+                    "additionalProperties": False,
                     "properties": {
 
                         "category_link": {
