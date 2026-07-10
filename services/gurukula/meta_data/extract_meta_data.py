@@ -11,7 +11,7 @@ class ExtractGuruKulaMetaData:
 
     def __init__(self):
         self.story_list = []
-        self.unwanted_stories =["/parichayah"]
+        self.unwanted_stories =["/parichayah","/introduction"]
         self.unwanted_categories=[
             "/sa/raghuvamsham",
             "/sa/nava-mishrita-gitani",
