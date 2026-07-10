@@ -31,8 +31,9 @@ class TokenizeSanskritPassageWeb:
         raw_data = self._extract_data(response)
         
         tokenized_data = self.parser.extract(raw_data)
-        cleaned_data = self._remove_duplicates(tokenized_data)
-        normalized_data = self._convert_to_devnagari(cleaned_data)
+        duplicates_removed = self._remove_duplicates(tokenized_data)
+        cleaned_data = self._remove_unknown_upos(duplicates_removed)
+        normalized_data = self._convert_to_devanagari(cleaned_data)
         
         
         new_data = self.data.copy()
@@ -154,7 +155,17 @@ class TokenizeSanskritPassageWeb:
 
         return cleaned_array
     
-    def _convert_to_devnagari(self, data):
+    def _remove_unknown_upos(self, data):
+        """
+        Removes tokens where Universal POS tag is X.
+        X represents unknown/other tokens.
+        """
+        return [
+            item for item in data
+            if item.get("upos") != "X"
+        ]
+    
+    def _convert_to_devanagari(self, data):
         final_array = []
 
         for item in data:
