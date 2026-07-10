@@ -1,12 +1,14 @@
-from config.dbconfig import connect_db
 from utils.tokenized_story_mapper import TokenizedStoryMapper
+from repository.base_repository import BaseRepository
 
 
-class GetTokenizedStoryByIdFromMongoDB:
+class GetTokenizedStoryByIdFromMongoDB(BaseRepository):
+    
+    collection_name = "tokenized_stories"
 
     def __init__(self, story_id):
-        self.db = connect_db()
-        self.collection = self.db["tokenized_stories"]
+        super().__init__()
+
         self.story_id = story_id
 
     def get_story(self):
@@ -21,10 +23,12 @@ class GetTokenizedStoryByIdFromMongoDB:
         return data
     
     
-class GetAllTokenizedStoriesFromMongoDB:
+class GetAllTokenizedStoriesFromMongoDB(BaseRepository):
+    
+    collection_name = "tokenized_stories"
     def __init__(self):
-        self.db = connect_db()
-        self.collection = self.db["tokenized_stories"]
+        super().__init__()
+
         
         
     def get_all(self):
@@ -38,11 +42,13 @@ class GetAllTokenizedStoriesFromMongoDB:
         }
         
         
-class GetTokenizedStoriesByCategoryFromMongoDB:
+class GetTokenizedStoriesByCategoryFromMongoDB(BaseRepository):
+    
+    collection_name = "tokenized_stories"
 
     def __init__(self, category_name):
-        self.db = connect_db()
-        self.collection = self.db["tokenized_stories"]
+        super().__init__()
+        
         self.category = category_name
 
     def get_stories(self):
@@ -62,14 +68,16 @@ class GetTokenizedStoriesByCategoryFromMongoDB:
             "data": data
         }
         
-class EditTokenizedStory:
+class EditTokenizedStory(BaseRepository):
+    collection_name = "tokenized_stories"
     def __init__(self, storyId, data):
+        super().__init__()
+        
         if not storyId:
             raise ValueError("Story Id is Required")
         if not data:
             raise ValueError("Tokenized Story not provided")
-        self.db = connect_db()
-        self.collection = self.db["tokenized_stories"]
+
         self.storyId = storyId
         self.data = data
         

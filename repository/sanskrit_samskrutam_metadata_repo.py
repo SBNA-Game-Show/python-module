@@ -1,12 +1,14 @@
-from config.dbconfig import connect_db
 from datetime import datetime
 
+from repository.base_repository import BaseRepository
 
-class WriteMetaData:
 
+class WriteMetaData(BaseRepository):
+    collection_name = "samskrutam_metadata"
+    
     def __init__(self, data):
-        self.db = connect_db()
-        self.collection = self.db["samskrutam_metadata"]
+        super().__init__()
+
         self.data = data
 
     def write(self):
@@ -28,11 +30,12 @@ class WriteMetaData:
         return len(self.data)
     
     
-class GetUnusedStories:
+class GetUnusedStories(BaseRepository):
+    
+    collection_name = "samskrutam_metadata"
 
     def __init__(self):
-        self.db = connect_db()
-        self.collection = self.db["samskrutam_metadata"]
+        super().__init__()
 
     def get_all(self) -> list:
         """Retrieves all stories across all sources where used is false.
@@ -61,11 +64,13 @@ class GetUnusedStories:
         # Execute and return the list of unused stories
         return list(self.collection.aggregate(pipeline))
     
-class GetStoryDataById:
+class GetStoryDataById(BaseRepository):
+    
+    collection_name = "samskrutam_metadata"
 
     def __init__(self, storyId):
-        self.db = connect_db()
-        self.collection = self.db["samskrutam_metadata"]
+        super().__init__()
+        
         self.storyId = storyId
 
     def get_data(self) -> dict or None: # type: ignore
@@ -103,11 +108,12 @@ class GetStoryDataById:
             "used": story_details.get("used"),
         }
         
-class UpdateStoryToUsed:
+class UpdateStoryToUsed (BaseRepository):
+    
+    collection_name = "samskrutam_metadata"
 
     def __init__(self, storyId):
-        self.db = connect_db()
-        self.collection = self.db["samskrutam_metadata"]
+        super().__init__()
         self.storyId = storyId
 
     def update(self) -> bool:

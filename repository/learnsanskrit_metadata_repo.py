@@ -2,13 +2,15 @@ from config.dbconfig import connect_db
 
 from utils.tokenized_story_mapper import TokenizedStoryMapper
 from pymongo.errors import BulkWriteError, PyMongoError
+from repository.base_repository import BaseRepository
 
 
-class LearnSanskritMetaDataRepository:
+class LearnSanskritMetaDataRepository(BaseRepository):
+    collection_name = "learnsank_meta"
 
     def __init__(self):
-        self.db = connect_db()
-        self.collection = self.db["learnsank_meta"]
+        super().__init__()
+
 
     def save_many(self, docs: list) -> dict:
 
@@ -37,11 +39,13 @@ class LearnSanskritMetaDataRepository:
             }
 
 
-class WriteTokenizedStoryToMongoDB:
+class WriteTokenizedStoryToMongoDB(BaseRepository):
+    collection_name = "tokenized_stories"
+    
     def __init__(self, story_data):
+        super().__init__()
         self.data = story_data
-        self.db = connect_db()
-        self.collection = self.db["tokenized_stories"]
+
         
     def save_story(self):
         doc = TokenizedStoryMapper.to_schema(self.data)
@@ -50,12 +54,13 @@ class WriteTokenizedStoryToMongoDB:
         
         return f"{result.inserted_id} tokenized and added to DB"
  
-class UpdateLearnSanskritMetaData:
+class UpdateLearnSanskritMetaData(BaseRepository):
+    collection_name = "learnsank_meta"
 
     def __init__(self, story_id):
+        super().__init__()
         self.story_id = story_id
-        self.db = connect_db()
-        self.collection = self.db["learnsank_meta"]
+
 
     def update(self):
 
@@ -71,12 +76,13 @@ class UpdateLearnSanskritMetaData:
 
         return "Story updated successfully"
     
-class GetMetaDataById:
+class GetMetaDataById(BaseRepository):
+    collection_name = "learnsank_meta"
 
     def __init__(self, story_id):
+        super().__init__()
         self.story_id = story_id
-        self.db = connect_db()
-        self.collection = self.db["learnsank_meta"]
+
         
     def get_data(self):
         # 1. Use .find() instead of .findall() to get all documents
@@ -96,11 +102,12 @@ class GetMetaDataById:
         return None
     
     
-class GetUnusedStories:
+class GetUnusedStories(BaseRepository):
+    collection_name = "learnsank_meta"
 
     def __init__(self):
-        self.db = connect_db()
-        self.collection = self.db["learnsank_meta"]
+        super().__init__()
+
 
     def get_all(self):
         # 1. Fetch entire documents that contain at least one 'used: False' story

@@ -1,14 +1,14 @@
-from config.dbconfig import connect_db
 from datetime import datetime
+from repository.base_repository import BaseRepository
 
 
-class WriteMetaData:
+class WriteMetaData(BaseRepository):
+    collection_name = "gurukula_metadata"
 
     def __init__(self, data):
+        super().__init__()
+        
         self.data = data
-        self.db = connect_db()
-        self.collection = self.db["gurukula_metadata"]
-
 
     def write(self):
 
@@ -28,11 +28,11 @@ class WriteMetaData:
             "categories": self.data["categories"]
         }
     
-class RetrieveUnusedStories:
+class RetrieveUnusedStories(BaseRepository):
+    collection_name = "gurukula_metadata"
 
     def __init__(self):
-        self.db = connect_db()
-        self.collection = self.db["gurukula_metadata"]
+        super().__init__()
 
 
     def get_all(self):
@@ -67,4 +67,49 @@ class RetrieveUnusedStories:
         ]
 
         return list(self.collection.aggregate(pipeline))
+    
+class RetrieveStoryById(BaseRepository):
+    collection_name = "gurukula_metadata"
+
+    def __init__(self, storyId):
+        super().__init__()
+        if not storyId:
+            raise ValueError("Story Id is Required")
+
+        self.storyId = storyId
+
+
+    def get(self):
+
+        pipeline = [
+            {
+                "$project": {
+                    "categories": {
+                        "$objectToArray": "$categories"
+                    }
+                }
+            },
+            {
+                "$unwind": "$categories"
+            },
+            {
+                "$unwind": "$categories.v.stories"
+            },
+            {
+                "$match": {
+                    "categories.v.stories._id": self.storyId
+                }
+            },
+            {
+                "$replaceWith": "$categories.v.stories"
+            }
+        ]
+
+        result = list(self.collection.aggregate(pipeline))
+
+        return result[0] if result else None
+    
+    
+        
+
     
