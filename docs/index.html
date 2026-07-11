@@ -51,7 +51,8 @@
         </p>
       </div>
     </div>
-    <!--Data Sources-->
+
+    <!-- Data Sources -->
     <div class="container mt-5">
       <h3
         class="text-primary"
@@ -63,9 +64,18 @@
       >
         Data Sources :
       </h3>
+
       <div class="collapse mt-3" id="dataSource">
+        <div class="alert alert-info">
+          <strong>Attribution Notice:</strong>
+          SB Dict uses publicly available Sanskrit learning resources. The
+          original content belongs to the respective content creators. This
+          project transforms the content into structured linguistic data for
+          educational, NLP, and Sanskrit learning purposes.
+        </div>
+
         <ul class="list-group">
-          <!-- Web Based Content (Collapsible) -->
+          <!-- Web Based Content -->
           <li class="list-group-item">
             <span
               class="text-primary"
@@ -78,32 +88,154 @@
               Web Based Content
             </span>
 
-            <div class="collapse mt-2" id="webContent">
-              <ul class="list-group">
-                <li class="list-group-item">
-                  <a
-                    href="https://learnsanskrit.cc"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Learn Sanskrit.cc
-                  </a>
-                                  <li class="list-group-item">
-                  <a
-                    href="https://sanskrit.samskrutam.com/en.literature-stories.ashx"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    sanskrit.samskrutam.com
-                  </a>
-                </li>
-                </li>
-              </ul>
+            <div class="collapse mt-3" id="webContent">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">Learn Sanskrit.cc</h5>
+
+                  <p class="card-text">
+                    Source:
+                    <a
+                      href="https://learnsanskrit.cc"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      https://learnsanskrit.cc
+                    </a>
+                  </p>
+
+                  <p>Usage:</p>
+
+                  <ul>
+                    <li>Sanskrit stories and vocabulary references</li>
+                    <li>Story metadata extraction</li>
+                    <li>Sanskrit language processing examples</li>
+                  </ul>
+
+                  <p class="text-muted">
+                    Content ownership remains with Learn Sanskrit.cc.
+                  </p>
+                </div>
+              </div>
+
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">Samskrutam Literature Stories</h5>
+
+                  <p class="card-text">
+                    Source:
+                    <a
+                      href="https://sanskrit.samskrutam.com/en.literature-stories.ashx"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      https://sanskrit.samskrutam.com
+                    </a>
+                  </p>
+
+                  <p>Usage:</p>
+
+                  <ul>
+                    <li>Sanskrit literature references</li>
+                    <li>Story corpus creation</li>
+                    <li>Educational NLP processing</li>
+                  </ul>
+
+                  <p class="text-muted">
+                    Original content belongs to Samskrutam.com.
+                  </p>
+                </div>
+              </div>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">Tokenizing Sanskrit Words</h5>
+
+                  <p class="card-text">
+                    Source:
+                    <a
+                      href="https://dharmamitra.org/translate"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      https://dharmamitra.org/translate
+                    </a>
+                  </p>
+
+                  <p>Usage:</p>
+
+                  <ul>
+                    <li>Tokenizing Sanskrit words in the Passage</li>
+                    <li>Extracting POS & definitions</li>
+                    <li>Educational NLP processing</li>
+                  </ul>
+
+                  <p class="text-muted">
+                    Original content belongs to https://dharmamitra.org
+                  </p>
+                </div>
+              </div>
             </div>
           </li>
 
-          <li class="list-group-item">Read PDF</li>
-          <li class="list-group-item">Read JSON</li>
+          <!-- PDF -->
+          <li class="list-group-item">
+            <span
+              class="text-primary"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#pdfContent"
+              aria-expanded="false"
+              aria-controls="pdfContent"
+            >
+              PDF Documents
+            </span>
+
+            <div class="collapse mt-3" id="pdfContent">
+              <p>
+                PDF documents uploaded by users or provided from external
+                educational resources are processed for:
+              </p>
+
+              <ul>
+                <li>Text extraction</li>
+                <li>Sanskrit OCR processing</li>
+                <li>Tokenization and linguistic analysis</li>
+              </ul>
+
+              <p class="text-muted">
+                Users should ensure they have appropriate rights to use uploaded
+                documents.
+              </p>
+            </div>
+          </li>
+
+          <!-- JSON -->
+          <li class="list-group-item">
+            <span
+              class="text-primary"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#jsonContent"
+              aria-expanded="false"
+              aria-controls="jsonContent"
+            >
+              JSON Data
+            </span>
+
+            <div class="collapse mt-3" id="jsonContent">
+              <p>
+                JSON files imported into SB Dict are used for structured
+                linguistic data ingestion, including:
+              </p>
+
+              <ul>
+                <li>Stories</li>
+                <li>Vocabulary</li>
+                <li>Word metadata</li>
+                <li>POS and morphological information</li>
+              </ul>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
@@ -265,21 +397,28 @@
           <div class="collapse mt-2" id="sanTokenize">
             <ul class="list-group">
               <li class="list-group-item">
-<h6 class="fw-bold">
-    <a href="https://dharmamitra.org/translate" target="_blank" rel="noopener noreferrer">
-        Dharmamitra
-    </a>
-</h6>
+                <h6 class="fw-bold">
+                  <a
+                    href="https://dharmamitra.org/translate"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Dharmamitra
+                  </a>
+                </h6>
                 <div class="mb-3">
-    <p class="mb-2">
-        The Sanskrit tokenization process follows these steps:
-    </p>
+                  <p class="mb-2">
+                    The Sanskrit tokenization process follows these steps:
+                  </p>
 
-    <ul>
-        <li>A POST request is sent to Dharmamitra's API.</li>
-        <li>The response output is extracted and normalized to match the English tokenization process.</li>
-    </ul>
-</div>
+                  <ul>
+                    <li>A POST request is sent to Dharmamitra's API.</li>
+                    <li>
+                      The response output is extracted and normalized to match
+                      the English tokenization process.
+                    </li>
+                  </ul>
+                </div>
               </li>
             </ul>
           </div>

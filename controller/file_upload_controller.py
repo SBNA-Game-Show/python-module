@@ -3,6 +3,7 @@ from pathlib import Path
 from flask import jsonify, request
 from werkzeug.utils import secure_filename
 from services.file_upload_services.json_reader import ReadUploadedJSON
+from services.file_upload_services.pdf_reader import PDFReader
 
 BASE_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "data")
@@ -57,7 +58,9 @@ def _determine_service_execution(file_category, filename):
     """
 
     if file_category == "pdf":
-        return "PDF processed successfully"
+        service = PDFReader(filename)
+        result = service.execute()
+        return result
 
     if file_category == "image":
         return "Image processed successfully"
