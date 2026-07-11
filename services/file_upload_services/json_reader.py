@@ -11,7 +11,9 @@ from repository.learnsanskrit_metadata_repo import WriteTokenizedStoryToMongoDB
 
 
 class ReadUploadedJSON:
+
     def __init__(self, fileName):
+
         if not fileName:
             raise ValueError("File name not provided.")
 
@@ -26,79 +28,159 @@ class ReadUploadedJSON:
 
         self.tokenized_data = []
 
+
     def execute(self):
 
         raw_data = self._read_file(self.fileName)
 
-        # ---------------------------
+
         # Single passage JSON
-        # ---------------------------
         if isinstance(raw_data, dict):
 
             normalized_data = self._normalize_passage(raw_data)
             final_data = self._tokenize_passage(normalized_data)
 
-            return self._write_to_DB(final_data)
+            result = self._write_to_DB(final_data)
 
-        # ---------------------------
+            if result.endswith("added to DB"):
+                self._delete_file()
+
+            return result
+
+
         # Multiple passage JSON
-        # ---------------------------
         elif isinstance(raw_data, list):
 
-            for item in raw_data:
-                normalized_data = self._normalize_passage(item)
-                tokenized = self._tokenize_passage(normalized_data)
-                self.tokenized_data.append(tokenized)
+            results_array = []
 
-            if not self.tokenized_data:
-                raise RuntimeError(
-                    "Tokenized data is empty after processing multi-passage JSON."
+            for item in raw_data:
+
+                normalized_data = self._normalize_passage(item)
+
+                tokenized = self._tokenize_passage(
+                    normalized_data
                 )
 
-            results = []
+                self.tokenized_data.append(tokenized)
+
 
             for passage in self.tokenized_data:
-                results.append(self._write_to_DB(passage))
 
-            return results
+                result = self._write_to_DB(passage)
+
+                results_array.append(result)
+
+
+            # Check after processing all stories
+            if all(
+                result.endswith("added to DB")
+                for result in results_array
+            ):
+
+                self._delete_file()
+
+                return {
+                    "success": True,
+                    "message": (
+                        f"{len(results_array)} stories "
+                        "Tokenized and Added to DB"
+                    )
+                }
+
+
+            return {
+                "success": False,
+                "message": "Some stories failed to write to DB",
+                "results": results_array
+            }
+
 
         else:
-            raise RuntimeError("Uploaded JSON must contain either an object or a list.")
+            raise RuntimeError(
+                "Uploaded JSON must contain either an object or a list."
+            )
+
 
     def _read_file(self, fileName):
+
         reader = FileSystemReader(fileName)
+
         return reader.read_file()
 
+
     def _normalize_passage(self, data):
+
         return {
             "_id": str(uuid4()),
+
             "title": {
                 "englishVersion": data["englishTitle"],
                 "sanskritVersion": data["sanskritTitle"],
             },
+
             "englishVersion": data["englishPassage"],
+
             "sanskritVersion": data["sanskritPassage"],
         }
+
 
     def _tokenize_passage(self, passage):
 
         eng_tokenizer = TokenizeEnglishVersion(passage)
-        eng_tokenized = eng_tokenizer.tokenize_english_version()
 
-        eng_synonymize = ExtractEnglishSynonymAntonym(eng_tokenized)
-        eng_synonym_added = eng_synonymize.execute()
+        eng_tokenized = (
+            eng_tokenizer.tokenize_english_version()
+        )
 
-        definition_adder = ExtractDefinitions(eng_synonym_added)
-        definition_added = definition_adder.execute()
 
-        eng_cleaner = CleanEnglishTokenizedData(definition_added)
-        cleaned_data = eng_cleaner.execute()
+        eng_synonymize = ExtractEnglishSynonymAntonym(
+            eng_tokenized
+        )
 
-        sa_tokenizer = TokenizeSanskritPassageWeb(cleaned_data)
-        final_data = sa_tokenizer.tokenize()
+        eng_synonym_added = (
+            eng_synonymize.execute()
+        )
 
-        return final_data
+
+        definition_adder = ExtractDefinitions(
+            eng_synonym_added
+        )
+
+        definition_added = (
+            definition_adder.execute()
+        )
+
+
+        eng_cleaner = CleanEnglishTokenizedData(
+            definition_added
+        )
+
+        cleaned_data = (
+            eng_cleaner.execute()
+        )
+
+
+        sa_tokenizer = TokenizeSanskritPassageWeb(
+            cleaned_data
+        )
+
+        return sa_tokenizer.tokenize()
+
+
 
     def _write_to_DB(self, data):
+
         writer = WriteTokenizedStoryToMongoDB(data)
+
         return writer.save_story()
+
+
+
+    def _delete_file(self):
+
+        reader = FileSystemReader(self.fileName)
+
+        file_path = reader.file_path
+
+        if os.path.exists(file_path):
+            os.remove(file_path)

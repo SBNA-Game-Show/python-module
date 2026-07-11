@@ -122,10 +122,16 @@ class PDFReader:
                 result.endswith("added to DB")
                 for result in results_array
             ):
+                if os.path.exists(self.file_path):
+                    os.remove(self.file_path)
                 return{
                     "success":True,
                     "message": f"{len(results_array)} stores Tokenized and Added to DB"
-                }        
+                }
+                
+            if os.path.exists(self.file_path):
+                os.remove(self.file_path)
+                            
         return {
             "success":False,
             "message": "Some Stories Failed to tokenize or added to DB",
@@ -189,8 +195,8 @@ class PDFReader:
                     merged.append({
                         "_id": str(uuid4()),
                         "title": {
-                            "englishTitle": nxt["title"],
-                            "sanskritTitle": current["title"]
+                            "englishVersion": nxt["title"],
+                            "sanskritVersion": current["title"]
                         },
                         "englishVersion": nxt["english"],
                         "sanskritVersion": [current["sanskrit"]]
@@ -207,8 +213,8 @@ class PDFReader:
                     merged.append({
                         "_id": str(uuid4()),
                         "title": {
-                            "englishTitle": current["title"],
-                            "sanskritTitle": nxt["title"]
+                            "englishVersion": current["title"],
+                            "sanskritVersion": nxt["title"]
                         },
                         "englishVersion": current["english"],
                         "sanskritVersion": [nxt["sanskrit"]]
