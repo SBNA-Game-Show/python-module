@@ -17,16 +17,13 @@ description: >
     - SingleStoryJSON
     - MultipleStoryJSON
 
-
 consumes:
   - multipart/form-data
 
 produces:
   - application/json
 
-
 parameters:
-
   - name: file
     in: formData
     required: true
@@ -36,9 +33,6 @@ parameters:
       PDF (.pdf),
       JSON (.json),
       Word (.docx),
-      TXT (.txt),
-      Image (.png/.jpg/.jpeg)
-
 
   - name: language
     in: formData
@@ -54,19 +48,14 @@ parameters:
     description: >
       Optional language hint for extraction and tokenization.
 
-
 responses:
-
   200:
-
     description: File successfully processed and tokenized
 
     schema:
-
       type: object
 
       properties:
-
         success:
           type: boolean
           example: true
@@ -76,23 +65,17 @@ responses:
           example: "File processed and stored successfully"
 
         data:
-
           type: object
 
           description: Tokenized output stored in MongoDB
 
-
-
   400:
-
     description: Invalid file upload or unsupported format
 
     schema:
-
       type: object
 
       properties:
-
         success:
           type: boolean
           example: false
@@ -101,18 +84,13 @@ responses:
           type: string
           example: "Unsupported file type"
 
-
-
   401:
-
     description: Unauthorized access
 
     schema:
-
       type: object
 
       properties:
-
         success:
           type: boolean
           example: false
@@ -121,18 +99,13 @@ responses:
           type: string
           example: "Unauthorized"
 
-
-
   500:
-
     description: Internal server error during processing pipeline
 
     schema:
-
       type: object
 
       properties:
-
         success:
           type: boolean
           example: false
@@ -141,16 +114,11 @@ responses:
           type: string
           example: "Failed to process file"
 
-
-
 definitions:
-
   SingleStoryJSON:
-
     type: object
 
     properties:
-
       englishTitle:
         type: string
         example: "rabbit, weasel, cat"
@@ -164,24 +132,18 @@ definitions:
         example: "When the rabbit left his home..."
 
       sanskritPassage:
-
         type: array
 
         items:
           type: string
 
-
-
   MultipleStoryJSON:
-
     type: array
 
     items:
-
       type: object
 
       properties:
-
         englishTitle:
           type: string
 
@@ -192,8 +154,38 @@ definitions:
           type: string
 
         sanskritPassage:
-
           type: array
 
           items:
             type: string
+
+  PDFDocumentformat:
+    type: object
+
+    description: >
+      Expected logical structure of the uploaded PDF.
+      The client uploads a PDF file, but the document should
+      follow this layout so the extraction pipeline can
+      correctly identify stories and passages.
+
+    properties:
+      englishTitle:
+        type: string
+        example: "The Rabbit, the Weasel, and the Cat"
+
+      sanskritTitle:
+        type: string
+        example: "शशकः नकुलः मार्जारी च"
+
+      englishPassage:
+        type: string
+        example: >
+          Once upon a time, a rabbit lived...
+
+      sanskritPassage:
+        type: string
+        items:
+          type: string
+        example:
+          - "अस्ति कश्चित् शशकः..."
+          - "सः वनम् अगच्छत्..."
