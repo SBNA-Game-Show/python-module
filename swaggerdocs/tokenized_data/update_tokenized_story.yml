@@ -19,7 +19,6 @@ parameters:
     schema:
       type: object
       properties:
-
         title:
           type: object
           properties:
@@ -89,6 +88,11 @@ parameters:
                   nullable: true
                 feats:
                   type: string
+
+                definition:
+                  type: string
+                  items:
+                    type: string
 
 responses:
   200:
