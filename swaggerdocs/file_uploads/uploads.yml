@@ -189,3 +189,34 @@ definitions:
         example:
           - "अस्ति कश्चित् शशकः..."
           - "सः वनम् अगच्छत्..."
+
+  WordDocumentformat:
+    type: object
+
+    description: >
+      Expected logical structure of the uploaded Word document.
+      The client uploads a Word file with .docx extension, but the document should
+      follow this layout so the extraction pipeline can
+      correctly identify stories and passages.
+
+    properties:
+      englishTitle:
+        type: string
+        example: "The Rabbit, the Weasel, and the Cat"
+
+      sanskritTitle:
+        type: string
+        example: "शशकः नकुलः मार्जारी च"
+
+      englishPassage:
+        type: string
+        example: >
+          Once upon a time, a rabbit lived...
+
+      sanskritPassage:
+        type: string
+        items:
+          type: string
+        example:
+          - "अस्ति कश्चित् शशकः..."
+          - "सः वनम् अगच्छत्..."

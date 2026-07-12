@@ -110,7 +110,7 @@ class PDFReader:
             
             for story in merged_stories:
                 eng_tokenized = self._tokenize_english_passage(story)
-                synonym_added = self._add_definitions(eng_tokenized)
+                synonym_added = self._add_synonyms(story)
                 definitions_added = self._add_definitions(synonym_added)
                 clean_eng_passage = self._clean_english_tokenized(definitions_added)
                 sa_tokenized = self._tokenize_sanskrit_passage(clean_eng_passage)

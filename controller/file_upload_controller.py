@@ -4,6 +4,7 @@ from flask import jsonify, request
 from werkzeug.utils import secure_filename
 from services.file_upload_services.json_reader import ReadUploadedJSON
 from services.file_upload_services.pdf_reader import PDFReader
+from services.file_upload_services.word_doc_reader import ReadWordDocument
 
 BASE_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "data")
@@ -66,7 +67,9 @@ def _determine_service_execution(file_category, filename):
         return "Image processed successfully"
 
     if file_category == "document":
-        return "Text document processed successfully"
+        service = ReadWordDocument(filename)
+        result = service.execute()
+        return result
 
     if file_category == "json":
         service = ReadUploadedJSON(filename)

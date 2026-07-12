@@ -18,6 +18,7 @@ dharmamitra-sanskrit-grammar==0.1.7
 indic-transliteration
 torch
 transformers
+python-docx
 
 
 
