@@ -118,7 +118,6 @@ class RetrieveMetaData:
             complete_page.append(complete_data)
             
             # Be polite to the server
-            time.sleep(10)
 
         return complete_page
 
