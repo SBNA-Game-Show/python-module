@@ -18,7 +18,6 @@ class RetrieveMetaData:
         response = requests.get(
             self.url,
             verify=False,
-            timeout=10
         )
         response.raise_for_status()
         return response
