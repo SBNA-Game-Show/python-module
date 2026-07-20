@@ -199,13 +199,26 @@
               <ul>
                 <li>Text extraction</li>
                 <li>Sanskrit OCR processing</li>
-                <li>Tokenization and linguistic analysis</li>
               </ul>
+              <strong
+                >**Limitation:** The application has been developed and tested
+                using digitally created PDF documents. As a result, it does not
+                guarantee the same level of accuracy or performance when
+                processing scanned PDF documents, as OCR quality may vary
+                depending on the document's resolution and formatting.
+              </strong>
 
               <p class="text-muted">
-                Users should ensure they have appropriate rights to use uploaded
-                documents.
+                Users should ensure that uploaded PDF documents follow the
+                required format shown below. A single PDF may contain multiple
+                passages, with each passage including both the Sanskrit and
+                English versions.
               </p>
+              <img
+                src="https://raw.githubusercontent.com/SBNA-Game-Show/sanskrit-asset/main/sbdict_workflow_images/pdf_structure.png"
+                alt="PDF processing workflow"
+                class="img-fluid rounded border"
+              />
             </div>
           </li>
 
@@ -224,16 +237,57 @@
 
             <div class="collapse mt-3" id="jsonContent">
               <p>
-                JSON files imported into SB Dict are used for structured
-                linguistic data ingestion, including:
+                The application expects uploaded JSON files to follow the
+                required key-value structure shown below. Users may upload
+                either a single passage or multiple passages within the same
+                JSON file. Refer to the examples below for the supported
+                single-passage and multi-passage JSON formats.
               </p>
 
-              <ul>
-                <li>Stories</li>
-                <li>Vocabulary</li>
-                <li>Word metadata</li>
-                <li>POS and morphological information</li>
-              </ul>
+              <div class="row">
+                <div class="col-md-6">
+                  <img
+                    src="https://raw.githubusercontent.com/SBNA-Game-Show/sanskrit-asset/main/sbdict_workflow_images/JSON_structure_single.png"
+                    alt="Single JSON Structure"
+                    class="img-fluid border rounded"
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <img
+                    src="https://raw.githubusercontent.com/SBNA-Game-Show/sanskrit-asset/main/sbdict_workflow_images/JSON_structure_multi.png"
+                    alt="Multiple JSON Structure"
+                    class="img-fluid border rounded"
+                  />
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- Word Document -->
+          <li class="list-group-item">
+            <span
+              class="text-primary"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#wordContent"
+              aria-expanded="false"
+              aria-controls="wordContent"
+            >
+              Microsoft Word Document
+            </span>
+
+            <div class="collapse mt-3" id="wordContent">
+              <p>
+                Users should ensure that uploaded word documents to follow the
+                required format shown below. A single word document may contain
+                multiple passages, with each passage including both the Sanskrit
+                and English versions.
+              </p>
+              <img
+                src="https://raw.githubusercontent.com/SBNA-Game-Show/sanskrit-asset/main/sbdict_workflow_images//word_structure.png"
+                alt="Word processing workflow"
+                class="img-fluid rounded border"
+              />
             </div>
           </li>
         </ul>
@@ -531,6 +585,32 @@
               </li>
             </ul>
           </div>
+          <li class="list-group-item">
+            <span
+              class="text-primary fw-semibold"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#readWord"
+              aria-expanded="false"
+              aria-controls="readWord"
+            >
+              Reading Microsoft Word:
+            </span>
+          </li>
+
+          <div class="collapse mt-2" id="readWord">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h6 class="fw-bold">Python-docx</h6>
+                <p class="mb-0">
+                  To parse Microsoft Word documents, the application uses
+                  Python’s `python-docx` library to load and process the file
+                  contents. The extracted text is then prepared for downstream
+                  tokenization and further language processing tasks.
+                </p>
+              </li>
+            </ul>
+          </div>
         </ul>
       </div>
     </div>
@@ -562,8 +642,19 @@
             </span>
           </li>
           <div class="collapse mt-2" id="webContentflow">
+            <p>
+              This application follows a structured pipeline to complete the
+              tokenization process, including extracting data from web sources,
+              processing and tokenizing the extracted content, and persisting
+              the resulting linguistic data into MongoDB.
+            </p>
             <ul class="list-group">
-              <li class="list-group-item"></li>
+              <li class="list-group-item">
+                <img
+                  src="https://raw.githubusercontent.com/SBNA-Game-Show/sanskrit-asset/main/sbdict_workflow_images/web_ext_python_module.png"
+                  alt="web_extraction_data_flow_image"
+                />
+              </li>
             </ul>
           </div>
           <li class="list-group-item">
@@ -579,8 +670,18 @@
             </span>
           </li>
           <div class="collapse mt-2" id="pdfReadflow">
+            <p>
+              This application follows a structured pipeline for extracting data
+              from PDF files, normalizing and tokenizing the extracted content,
+              and persisting the resulting linguistic data into MongoDB.
+            </p>
             <ul class="list-group">
-              <li class="list-group-item"></li>
+              <li class="list-group-item">
+                <img
+                  src="https://raw.githubusercontent.com/SBNA-Game-Show/sanskrit-asset/main/sbdict_workflow_images/read_pdf_python_module.png"
+                  alt="pdf_extraction_data_flow_image"
+                />
+              </li>
             </ul>
           </div>
           <li class="list-group-item">
@@ -595,9 +696,50 @@
               Read JSON:
             </span>
           </li>
+
           <div class="collapse mt-2" id="jsonReadflow">
+            <p>
+              This application processes JSON files by validating the provided
+              key-value structure, extracting passage data, normalizing the
+              content, tokenizing the text, and storing the resulting linguistic
+              information in MongoDB.
+            </p>
             <ul class="list-group">
-              <li class="list-group-item"></li>
+              <li class="list-group-item">
+                <img
+                  src="https://raw.githubusercontent.com/SBNA-Game-Show/sanskrit-asset/main/sbdict_workflow_images/read_json_python_module.png"
+                  alt="pdf_extraction_data_flow_image"
+                />
+              </li>
+            </ul>
+          </div>
+          <li class="list-group-item">
+            <span
+              class="text-primary fw-semibold"
+              style="cursor: pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#wordReadflow"
+              aria-expanded="false"
+              aria-controls="wordReadflow"
+            >
+              Read Microsoft Word Document Work Flow:
+            </span>
+          </li>
+
+          <div class="collapse mt-2" id="wordReadflow">
+            <p>
+              Microsoft Word documents are processed using Python's python-docx
+              library to extract textual content. The extracted data is
+              normalized, tokenized, analyzed linguistically, and stored in
+              MongoDB for downstream applications.
+            </p>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <img
+                  src="https://raw.githubusercontent.com/SBNA-Game-Show/sanskrit-asset/main/sbdict_workflow_images/word_reader_python_module.png"
+                  alt="pdf_extraction_data_flow_image"
+                />
+              </li>
             </ul>
           </div>
         </ul>
