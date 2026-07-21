@@ -1,11 +1,10 @@
-import spacy
-
+from nlp.spacy_loader import get_spacy
 
 class TokenizeEnglishVersion:
 
     def __init__(self, data):
         self.data = data
-        self.nlp = spacy.load("en_core_web_sm")
+        self.nlp = get_spacy()
 
     def load_english_version_story(self):
 
