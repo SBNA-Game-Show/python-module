@@ -67,6 +67,9 @@ class TokenizeSanskritPassageWeb:
                 sentence = sentence.replace(":", "")
                 sentence = sentence.replace("(", "")
                 sentence = sentence.replace(")", "")
+                sentence = sentence.replace("--","")
+                sentence = sentence.replace("\\","")
+                
                 
                 cleaned_passage.append(sentence)
                 
