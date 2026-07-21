@@ -1,6 +1,7 @@
 import os
 import re
 import unicodedata
+import gc
 
 import fitz as pymupdf
 from uuid import uuid4
@@ -109,14 +110,20 @@ class PDFReader:
             results_array = []
             
             for story in merged_stories:
-                eng_tokenized = self._tokenize_english_passage(story)
-                synonym_added = self._add_synonyms(story)
-                definitions_added = self._add_definitions(synonym_added)
-                clean_eng_passage = self._clean_english_tokenized(definitions_added)
-                sa_tokenized = self._tokenize_sanskrit_passage(clean_eng_passage)
+                data = self._tokenize_english_passage(story)
+                data = self._add_synonyms(data)
+                data = self._add_definitions(data)
+                data = self._clean_english_tokenized(data)
+                data = self._tokenize_sanskrit_passage(data)
                 
-                result = self._write_to_DB(sa_tokenized)
+                result = self._write_to_DB(data)
                 results_array.append(result)
+                
+                del data
+                gc.collect()
+                
+                del merged_stories
+                gc.collect()
                 
             if all(
                 result.endswith("added to DB")
@@ -129,8 +136,12 @@ class PDFReader:
                     "message": f"{len(results_array)} stores Tokenized and Added to DB"
                 }
                 
+            gc.collect()
+                
             if os.path.exists(self.file_path):
                 os.remove(self.file_path)
+                
+                
                             
         return {
             "success":False,
