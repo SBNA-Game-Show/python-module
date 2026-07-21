@@ -5,7 +5,7 @@ import json
 
 
 from utils.dharmamitra_parser import DharmamitraExtractor
-from utils.sanskrit_parser import TransliterateToSanskrit,SanskritToTransliterate
+from utils.sanskrit_parser import TransliterateToSanskrit
 
 class TokenizeSanskritPassageWeb:
     def __init__(self, data):
