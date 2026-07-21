@@ -25,25 +25,28 @@ class ExtractNewFable:
         vendorId = meta_data["vendorId"]
         url = meta_data["source_url"]        
         ## 2. Send request to sanskrit.samskrutam to fetch data
-        raw_data = self._send_request(url,vendorId)       
+        data = self._send_request(url,vendorId)       
         ## 3. Normalize data
-        normalized_data = self._normalize_data(raw_data)
+        data = self._normalize_data(data)
         ## 4. Tokenize English Passage
-        eng_tokenized = self._tokenize_english_version(normalized_data)
+        data = self._tokenize_english_version(data)
         ## 5. Tokenize Sanskrit Passage
-        sa_tokenized = self._tokenize_sanskrit_version(eng_tokenized)
+        data = self._tokenize_sanskrit_version(data)
         ## 6. Add synonyms and Antonyms for tokenized english
-        eng_grammar_added = self._add_english_grammar(sa_tokenized)
+        data = self._add_english_grammar(data)
         ## 7. Add english definitions to the tokenized english
-        eng_def_added = self._add_english_definitions(eng_grammar_added)
+        data = self._add_english_definitions(data)
         ## 7. Clean English Tokenized Array
-        cleaned_data = self._clean_eng_data(eng_def_added)
-        cleaned_data["_id"] = self.storyId
+        data = self._clean_eng_data(data)
+        data["_id"] = self.storyId
         ##8. Write to Mongo DB
-        result = self._write_to_db(cleaned_data)
+        result = self._write_to_db(data)
         
         if result is None:
             return "Internal Server Error"
+        
+        import gc
+        gc.collect()
         
         updater = self._update_meta_data(self.storyId)
      

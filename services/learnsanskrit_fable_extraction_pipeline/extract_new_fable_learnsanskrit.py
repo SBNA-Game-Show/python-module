@@ -70,6 +70,11 @@ class FetchNewFable:
         if result is None:
             return "Internal server Error"
         
+        del cleaned_data
+        
+        import gc
+        gc.collect()
+        
         # Updating Learn Sanskrit Metadata collection
         
         updater = self._update_story_toDB(self.story_id)

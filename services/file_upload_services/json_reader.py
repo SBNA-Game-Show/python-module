@@ -1,4 +1,5 @@
 import os
+import gc
 from uuid import uuid4
 
 from utils.file_system_reader import FileSystemReader
@@ -37,10 +38,10 @@ class ReadUploadedJSON:
         # Single passage JSON
         if isinstance(raw_data, dict):
 
-            normalized_data = self._normalize_passage(raw_data)
-            final_data = self._tokenize_passage(normalized_data)
+            data = self._normalize_passage(raw_data)
+            data = self._tokenize_passage(data)
 
-            result = self._write_to_DB(final_data)
+            result = self._write_to_DB(data)
 
             if result.endswith("added to DB"):
                 self._delete_file()
@@ -61,17 +62,16 @@ class ReadUploadedJSON:
                     normalized_data
                 )
 
-                self.tokenized_data.append(tokenized)
-
-
-            for passage in self.tokenized_data:
-
-                result = self._write_to_DB(passage)
+                result = self._write_to_DB(tokenized)
 
                 results_array.append(result)
 
+                del normalized_data
+                del tokenized
 
-            # Check after processing all stories
+                gc.collect()
+
+
             if all(
                 result.endswith("added to DB")
                 for result in results_array
