@@ -10,7 +10,7 @@ services:
     container_name: python-services
 
     ports:
-      - "5001:5001"
+      - "5100:5100"
 
     volumes:
       - ../:/app
