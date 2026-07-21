@@ -114,7 +114,7 @@ class FetchNewFable:
     def _get_story_data_from_DB(self,story_id):
         req = GetMetaDataById(story_id)
         result = req.get_data()
-        print("DB RESULT:", result)
+        # print("DB RESULT:", result)
         return result
     
     def _clean_english_data(self,data):
