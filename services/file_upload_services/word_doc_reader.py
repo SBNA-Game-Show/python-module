@@ -2,6 +2,7 @@ import re
 import os
 from docx import Document
 from uuid import uuid4
+import gc
 
 from repository.learnsanskrit_metadata_repo import WriteTokenizedStoryToMongoDB
 from services.tokenize_english_passage import TokenizeEnglishVersion
@@ -70,16 +71,27 @@ class ReadWordDocument:
                 
             })
             
+        del doc
+        gc.collect()
+        del paragraphs
+        gc.collect()
+            
         results_array = [] 
         for story in stories:
-            eng_tokenized = self._tokenize_english_passage(story)
-            synonym_added = self._add_synonyms(eng_tokenized)
-            definitions_added = self._add_definitions(synonym_added)
-            clean_eng_passage = self._clean_english_tokenized(definitions_added)
-            sa_tokenized = self._tokenize_sanskrit_passage(clean_eng_passage)
+            data = self._tokenize_english_passage(story)
+            data = self._add_synonyms(data)
+            data = self._add_definitions(data)
+            data = self._clean_english_tokenized(data)
+            data = self._tokenize_sanskrit_passage(data)
             
-            result = self._write_to_DB(sa_tokenized)
+            result = self._write_to_DB(data)
             results_array.append(result)
+            
+            del data
+            gc.collect()
+            
+        del stories
+        gc.collect()
             
         if all(
                 result.endswith("added to DB")
@@ -92,6 +104,8 @@ class ReadWordDocument:
                     "success":True,
                     "message":f"{len(results_array)} stories tokenized and added to DB"
                 }
+                
+        gc.collect()
                 
         if os.path.exists(self.file_path):
                 os.remove(self.file_path)            

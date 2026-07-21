@@ -8,6 +8,6 @@ def get_spacy():
 
     if _nlp is None:
         print("Loading spaCy model...")
-        _nlp = spacy.load("en_core_web_sm")
+        _nlp = spacy.load("en_core_web_sm",disable=["parser","ner"])
 
     return _nlp

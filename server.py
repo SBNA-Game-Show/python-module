@@ -14,7 +14,6 @@ from routes.learnsanskrit_meta_data_routes import story_data_bp
 from routes.dictionary_routes import dictionary_bp
 from routes.file_upload_routes import upload_file_bp
 from routes.sanskrit_samskrutam_meta_data_routes import san_samskrutam_meta_bp
-from routes.gurukula_metadata_routes import gurukula_meta_bp
 
 
 
@@ -50,7 +49,6 @@ app.register_blueprint(tokenize_data_bp,url_prefix=BASE_URL)
 app.register_blueprint(dictionary_bp,url_prefix = BASE_URL)
 app.register_blueprint(upload_file_bp,url_prefix = BASE_URL)
 app.register_blueprint(san_samskrutam_meta_bp,url_prefix=BASE_URL)
-app.register_blueprint(gurukula_meta_bp,url_prefix=BASE_URL)
 
 
 
