@@ -10,12 +10,12 @@ class CleanEnglishTokenizedData:
         
         tokenized_array = self._extract_tokenized_data(self.data)
         cleaned_version = self._remove_space_punctuation(tokenized_array)
-        final_version = self._remove_empty_arrays(cleaned_version)
-        duplicate_removed = self._remove_duplicates(final_version)
-        definition_cleaned = self._remove_empty_definitions(duplicate_removed)
+        cleaned_version = self._remove_empty_arrays(cleaned_version)
+        cleaned_version = self._remove_duplicates(cleaned_version)
+        cleaned_version = self._remove_empty_definitions(cleaned_version)
         
         new_data = self.data.copy()
-        new_data["tokenized_english_version"] = definition_cleaned
+        new_data["tokenized_english_version"] = cleaned_version
         
         return new_data
         
