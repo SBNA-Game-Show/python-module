@@ -1,62 +1,82 @@
 name: CI Pipeline - Development
 
+
 on:
+
   push:
     branches:
       - development
 
-  pull_request:
-    branches:
-      - development
 
 jobs:
+
   test:
+
     name: Build and Test Development Environment
 
     runs-on: ubuntu-latest
 
+
     steps:
-      # Checkout repository
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Verify Docker
+
       - name: Verify Docker Installation
         run: |
           docker --version
           docker compose version
 
-      # Build Development Container
-      #
-      # Dockerfile location:
-      # docker.dev/Dockerfile.dev
-      #
+
+      - name: Verify Secrets
+        env:
+          ATLAS_URI: ${{ secrets.ATLAS_URI }}
+
+        run: |
+          if [ -z "$ATLAS_URI" ]; then
+              echo "ATLAS_URI secret missing"
+              exit 1
+          else
+              echo "ATLAS_URI secret available"
+          fi
+
+
       - name: Build Development Docker Image
         run: |
           docker build \
             -f docker.dev/Dockerfile \
             -t sb-dict-dev:test .
 
-      # Run Tests Inside Container
+
       - name: Run Pytest
+        env:
+          ATLAS_URI: ${{ secrets.ATLAS_URI }}
+
         run: |
           docker run --rm \
           -e PYTHONPATH=/app \
-          -e ATLAS_URI="${{ secrets.ATLAS_URI }}" \
+          -e ATLAS_URI="$ATLAS_URI" \
           -e DATABASE_NAME="WordComplex" \
           sb-dict-dev:test \
           pytest tests -v
 
-      # Coverage Report
+
       - name: Run Coverage Tests
+        env:
+          ATLAS_URI: ${{ secrets.ATLAS_URI }}
+
         run: |
           docker run --rm \
           -e PYTHONPATH=/app \
+          -e ATLAS_URI="$ATLAS_URI" \
+          -e DATABASE_NAME="WordComplex" \
           sb-dict-dev:test \
           sh -c "pip install pytest-cov && pytest tests --cov=. --cov-report=term-missing"
 
-      # Cleanup
+
       - name: Cleanup Docker Image
         if: always()
+
         run: |
           docker rmi sb-dict-dev:test || true
