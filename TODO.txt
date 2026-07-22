@@ -1,39 +1,23 @@
-TESTS:
-1. extract_new_fable_learnsanskrit from services
-2. extract_data_learnsanskrit from services/fable_extraction_pipeline
-3. extract_english_synonym_antonym from services/fable_extraction_pipeline
-4. tokenize_english_version_story from services/fable_extraction_pipeline
-5. tokenize_sanskrit_version_story from services/fable_extraction_pipeline
-
-
-
-New Tests
-1. tokenize_english_word from services/tokenize_english_word
-2.  get_antonyms from services/tokenize_english_word
-3. get_synonyms from services/tokenize_english_word
-4. get_wordnet_pos from services/tokenize_english_word
-5. process_english_word from services
-6. retrieve_tokenized_stories_by_category from services
-7. tokenized_data_learnsanskrit.fetch_tokenized_stories_by_category from controller
-8. tokenized_story_mapper from utils
-9. from dictionary_controller tokenize_english_word
-10.Learn Sanskrit Meta data Mapper from utils
-11. write_learnsanskrit_meta_data_to_mongodb from repository
-
-
-API ENDPOINTS
-4. get_noun_verb_sanskrit(word based)
-
-
-REFACTOR:
- - ENGLISH SYNONYMS AND ANTONYMS PIPELINE TO PROCESS BY WORD
- - tokenize_english_version_story  (Tests must be redone)- complete change
- - extract_english_synonum_antonym (Tests must be redone) - complete change
-
-
-
-
-trial push to hugging face for compatibility and exposing API ENDPOINTS //done
-
-
-DUe to unforseen changes i had to redo the whole git repository
+1. System Enhancements Required
+- Implement a Request Queue Management System
+- Due to limited memory availability, only one POST request should be processed at a time.
+- Implement a queue-based processing mechanism using a First-In-First-Out (FIFO) approach.
+- Incoming POST requests should be added to the queue and executed sequentially.
+- The next request should begin processing only after the previous request completes, regardless of whether the response is successful or failed.
+- The queue system should handle:
+- Request tracking
+- Processing status
+- Failure handling
+- Automatic execution of the next queued request
+2. Implement CI/CD Pipeline
+- Add an automated CI/CD pipeline to improve deployment reliability.
+- The pipeline should include:
+- Automated test execution
+- Code quality checks
+- Build process
+- Docker image creation
+- Deployment automation
+- Environment-specific configuration handling
+3. Implement Token-Based Authentication
+- Secure application endpoints by adding token-based authentication.
+- Protect all sensitive API endpoints from unauthorized access.
