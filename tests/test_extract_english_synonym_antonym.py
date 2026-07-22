@@ -33,9 +33,7 @@ class TestExtractEnglishSynonymAntonym:
             ]
         })
 
-        result = extractor._extract_data(
-            extractor.data
-        )
+        result = extractor._extract_data()
 
         assert result == [
             {"word": "test"}
@@ -45,9 +43,7 @@ class TestExtractEnglishSynonymAntonym:
 
         extractor = ExtractEnglishSynonymAntonym({})
 
-        result = extractor._extract_data(
-            extractor.data
-        )
+        result = extractor._extract_data()
 
         assert result == []
 
@@ -81,9 +77,7 @@ class TestExtractEnglishSynonymAntonym:
 
         assert "tokenized_english_version" in result
 
-        token = result[
-            "tokenized_english_version"
-        ][0]
+        token = result["tokenized_english_version"][0]
 
         assert token["synonyms"] == [
             "excellent",
@@ -125,9 +119,8 @@ class TestExtractEnglishSynonymAntonym:
             result["tokenized_english_version"]
         ) == 2
 
-        for token in result[
-            "tokenized_english_version"
-        ]:
+        for token in result["tokenized_english_version"]:
+
             assert token["synonyms"] == [
                 "synonym"
             ]
