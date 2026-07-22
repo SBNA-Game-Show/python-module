@@ -34,7 +34,7 @@ jobs:
       - name: Build Development Docker Image
         run: |
           docker build \
-            -f docker.dev/Dockerfile.dev \
+            -f docker.dev/Dockerfile \
             -t sb-dict-dev:test .
 
       # Run Tests Inside Container
