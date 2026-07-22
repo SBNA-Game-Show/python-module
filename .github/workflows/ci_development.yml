@@ -41,9 +41,11 @@ jobs:
       - name: Run Pytest
         run: |
           docker run --rm \
-            -e PYTHONPATH=/app \
-            sb-dict-dev:test \
-            pytest tests -v
+          -e PYTHONPATH=/app \
+          -e ATLAS_URI="${{ secrets.TEST_ATLAS_URI }}" \
+          -e DATABASE_NAME="WordComplex" \
+          sb-dict-dev:test \
+          pytest tests -v
 
       # Coverage Report
       - name: Run Coverage
