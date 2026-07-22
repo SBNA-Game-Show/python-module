@@ -1,5 +1,4 @@
-import spacy
-
+from nlp.spacy_loader import get_spacy
 class TokenizeEnglishWord:
 
     def __init__(self, english_word):
@@ -9,7 +8,7 @@ class TokenizeEnglishWord:
         self.word = english_word
 
         # load model once per instance (works, but see note below for optimization)
-        self.nlp = spacy.load("en_core_web_sm")
+        self.nlp = get_spacy()
 
     def tokenize(self):
         doc = self.nlp(self.word)

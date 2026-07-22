@@ -1,17 +1,17 @@
 import json
 import pytest
 
-from services.learnsanskrit_fable_extraction_pipeline.convert_to_JSON import ExtractDataFromLearnSanskrit
+from services.learnsanskrit_fable_extraction_pipeline.convert_to_JSON import (
+    ExtractDataFromLearnSanskrit,
+)
 
-# Tests data extraction and transformation from LearnSanskrit API responses.
+
 class TestExtractDataFromLearnSanskrit:
+    """Tests data extraction and transformation from LearnSanskrit API responses."""
 
-    # Provides sample LearnSanskrit API response data for testing.
     @pytest.fixture
     def sample_data(self):
-        """
-        Sample data that mimics the LearnSanskrit API response.
-        """
+        """Sample LearnSanskrit API response."""
         return {
             "data": {
                 "summary_head": [
@@ -27,102 +27,57 @@ class TestExtractDataFromLearnSanskrit:
                 ]
             }
         }
-    # Verifies that dictionary input is accepted without modification.
+
     def test_parse_json_dictionary(self, sample_data):
         extractor = ExtractDataFromLearnSanskrit(sample_data)
+
         assert extractor.data == sample_data
-    # Verifies that a JSON string is correctly parsed into a dictionary.
+
     def test_parse_json_string(self, sample_data):
         json_string = json.dumps(sample_data)
 
         extractor = ExtractDataFromLearnSanskrit(json_string)
 
         assert extractor.data == sample_data
-    # Verifies that invalid JSON input raises a ValueError.
+
     def test_parse_json_invalid_data(self):
         with pytest.raises(ValueError) as exc:
             ExtractDataFromLearnSanskrit("INVALID_JSON")
 
         assert str(exc.value) == "INVALID JSON DATA"
-    # Verifies extraction of the English story title.
+
+    def test_init_with_empty_data(self):
+        with pytest.raises(ValueError) as exc:
+            ExtractDataFromLearnSanskrit(None)
+
+        assert str(exc.value) == "DATA IS NOT PROVIDED TO CONVERT TO JSON"
+
     def test_extract_english_title(self, sample_data):
         extractor = ExtractDataFromLearnSanskrit(sample_data)
 
-        assert extractor.english_title == "Lion, Mouse"
-    # Verifies extraction of actor names from the title.
+        assert extractor._extract_english_title() == "Lion, Mouse"
+
     def test_extract_actors(self, sample_data):
         extractor = ExtractDataFromLearnSanskrit(sample_data)
 
-        assert extractor.actors == [
+        assert extractor._extract_actors() == [
             "Lion",
-            "Mouse"
+            "Mouse",
         ]
-    # Verifies extraction of the story moral.
+
     def test_extract_moral(self, sample_data):
         extractor = ExtractDataFromLearnSanskrit(sample_data)
 
-        assert extractor.moral == "Kindness is rewarded"
-    # Verifies extraction of the English version of the story.
-    def test_extract_english_story(self, sample_data):
-        extractor = ExtractDataFromLearnSanskrit(sample_data)
+        assert extractor._extract_moral() == "Kindness is rewarded"
 
-        assert extractor.english_version == "A lion once spared a mouse."
-    # Verifies extraction of transliterated Sanskrit content.
-    def test_extract_transliterated_version(self, sample_data):
-        extractor = ExtractDataFromLearnSanskrit(sample_data)
-
-        assert extractor.transliterated_version == [
-            "siṃhaḥ mūṣakaḥ"
-        ]
-    # Verifies extraction of Sanskrit text content.
-    def test_extract_sanskrit_version(self, sample_data):
-        extractor = ExtractDataFromLearnSanskrit(sample_data)
-
-        assert extractor.sanskrit_version == [
-            "सिंहः मूषकः"
-        ]
-    # Verifies the Sanskrit title is extracted from the first Sanskrit entry.
-    def test_extract_sanskrit_title(self, sample_data):
-        extractor = ExtractDataFromLearnSanskrit(sample_data)
-
-        assert extractor.sanskrit_title == "सिंहः मूषकः"
-
-    # Verifies the final JSON structure contains all expected fields.
-    def test_get_json_data(self, sample_data):
-        extractor = ExtractDataFromLearnSanskrit(sample_data)
-
-        result = extractor.get_json_data()
-
-        assert result == {
-            "title": {
-                "englishversion": "Lion, Mouse",
-                "sanskritversion": "सिंहः मूषकः"
-            },
-            "actors": [
-                "Lion",
-                "Mouse"
-            ],
-            "storyMoral": ["Kindness is rewarded"],
-            "englishVersion": "A lion once spared a mouse.",
-            "transliteratedVersion": [
-                "siṃhaḥ mūṣakaḥ"
-            ],
-            "sanskritVersion": [
-                "सिंहः मूषकः"
-            ]
-        }
-# Verifies empty and numeric transliterated values are ignored.
-    def test_empty_transliterated_sections(self):
+    def test_extract_moral_removes_parentheses(self):
         data = {
             "data": {
                 "summary_head": [
                     "Lion",
-                    "Moral"
+                    "(Be Kind)"
                 ],
                 "summary_text": "Story",
-                "texts": [
-                    "<div></div><div>123</div><div>word</div>"
-                ],
                 "textsdeva": [
                     "<div>शब्द</div>"
                 ]
@@ -131,29 +86,116 @@ class TestExtractDataFromLearnSanskrit:
 
         extractor = ExtractDataFromLearnSanskrit(data)
 
-        assert extractor.transliterated_version == [
-            "word"
+        assert extractor._extract_moral() == "Be Kind"
+
+    def test_extract_english_story(self, sample_data):
+        extractor = ExtractDataFromLearnSanskrit(sample_data)
+
+        assert extractor._extract_english_version_story() == (
+            "A lion once spared a mouse."
+        )
+
+    def test_extract_sanskrit_version(self, sample_data):
+        extractor = ExtractDataFromLearnSanskrit(sample_data)
+
+        assert extractor._extract_sanskrit_version_story() == [
+            "सिंहः मूषकः"
         ]
-    # Verifies empty and numeric Sanskrit values are ignored.
+
+    def test_extract_sanskrit_title(self, sample_data):
+        extractor = ExtractDataFromLearnSanskrit(sample_data)
+
+        assert (
+            extractor._extracting_sanskrit_version_story_title()
+            == "सिंहः मूषकः"
+        )
+
+    def test_get_json_data(self, sample_data):
+        extractor = ExtractDataFromLearnSanskrit(sample_data)
+
+        result = extractor.get_json_data()
+
+        assert result == {
+            "title": {
+                "englishVersion": "Lion, Mouse",
+                "sanskritVersion": "सिंहः मूषकः",
+            },
+            "actors": [
+                "Lion",
+                "Mouse",
+            ],
+            "storyMoral": [
+                "Kindness is rewarded",
+            ],
+            "englishVersion": "A lion once spared a mouse.",
+            "sanskritVersion": [
+                "सिंहः मूषकः",
+            ],
+        }
+
     def test_empty_sanskrit_sections(self):
         data = {
             "data": {
                 "summary_head": [
                     "Lion",
-                    "Moral"
+                    "Moral",
                 ],
                 "summary_text": "Story",
-                "texts": [
-                    "<div>word</div>"
-                ],
                 "textsdeva": [
                     "<div></div><div>123</div><div>शब्द</div>"
-                ]
+                ],
             }
         }
 
         extractor = ExtractDataFromLearnSanskrit(data)
 
-        assert extractor.sanskrit_version == [
+        assert extractor._extract_sanskrit_version_story() == [
             "शब्द"
         ]
+
+    def test_multiple_sanskrit_sections(self):
+        data = {
+            "data": {
+                "summary_head": [
+                    "Lion",
+                    "Moral",
+                ],
+                "summary_text": "Story",
+                "textsdeva": [
+                    "<div>शब्द१</div><div>शब्द२</div>",
+                    "<div>शब्द३</div><div>शब्द४</div>",
+                ],
+            }
+        }
+
+        extractor = ExtractDataFromLearnSanskrit(data)
+
+        assert extractor._extract_sanskrit_version_story() == [
+            "शब्द१ शब्द२",
+            "शब्द३ शब्द४",
+        ]
+
+    def test_ignore_numeric_only_sections(self):
+        data = {
+            "data": {
+                "summary_head": [
+                    "Lion",
+                    "Moral",
+                ],
+                "summary_text": "Story",
+                "textsdeva": [
+                    "<div>1</div><div>2</div><div>3</div>"
+                ],
+            }
+        }
+
+        extractor = ExtractDataFromLearnSanskrit(data)
+
+        assert extractor._extract_sanskrit_version_story() == []
+
+    def test_parse_json_list(self):
+        data = [{"name": "story"}]
+
+        extractor = ExtractDataFromLearnSanskrit(data)
+
+        assert extractor.data == data

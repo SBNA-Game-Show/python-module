@@ -43,6 +43,7 @@ class FetchNewFable:
         story_category = match.group()
         # 2. Extract & Transform
         raw_data = self._retrieve_raw_data(vendor_id)
+        
         cleaned_data = self._clean_data(raw_data)
         ## Adding the same request id for the story
         cleaned_data["_id"] = self.story_id
@@ -50,16 +51,16 @@ class FetchNewFable:
         
         ## 3. Enrich / Tokenize
         # Tokenizing English words
-        tokenized_english = self._tokenize_english_version(cleaned_data)
+        cleaned_data = self._tokenize_english_version(cleaned_data)
         #Adding Synonyms and antonyms
-        tokenized_english_with_grammer = self._add_synonym_antonym(tokenized_english)
-        definitions_added = self._add_definitions(tokenized_english_with_grammer)
+        cleaned_data = self._add_synonym_antonym(cleaned_data)
+        cleaned_data = self._add_definitions(cleaned_data)
         
         
         #Tokenizing Sanskrit words
-        tokenized_sanskrit_version = self._tokenize_sanskrit_version(definitions_added)
+        cleaned_data = self._tokenize_sanskrit_version(cleaned_data)
         # cleaning english words that does not have synonyms and antonyms
-        final_version = self._clean_english_data(tokenized_sanskrit_version)
+        final_version = self._clean_english_data(cleaned_data)
         
         
         
@@ -68,6 +69,11 @@ class FetchNewFable:
         
         if result is None:
             return "Internal server Error"
+        
+        del cleaned_data
+        
+        import gc
+        gc.collect()
         
         # Updating Learn Sanskrit Metadata collection
         
@@ -108,7 +114,7 @@ class FetchNewFable:
     def _get_story_data_from_DB(self,story_id):
         req = GetMetaDataById(story_id)
         result = req.get_data()
-        print("DB RESULT:", result)
+        # print("DB RESULT:", result)
         return result
     
     def _clean_english_data(self,data):

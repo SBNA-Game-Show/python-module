@@ -15,8 +15,5 @@ pymupdf
 pytesseract 
 pillow
 indic-transliteration
-dharmamitra-sanskrit-grammar==0.1.7
-torch
-transformers
 python-docx
 

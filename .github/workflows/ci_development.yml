@@ -1,0 +1,62 @@
+name: CI Pipeline - Development
+
+on:
+  push:
+    branches:
+      - development
+
+  pull_request:
+    branches:
+      - development
+
+jobs:
+  test:
+    name: Build and Test Development Environment
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Verify Docker
+      - name: Verify Docker Installation
+        run: |
+          docker --version
+          docker compose version
+
+      # Build Development Container
+      #
+      # Dockerfile location:
+      # docker.dev/Dockerfile.dev
+      #
+      - name: Build Development Docker Image
+        run: |
+          docker build \
+            -f docker.dev/Dockerfile.dev \
+            -t sb-dict-dev:test .
+
+      # Run Tests Inside Container
+      - name: Run Pytest
+        run: |
+          docker run --rm \
+            -e PYTHONPATH=/app \
+            sb-dict-dev:test \
+            pytest tests -v
+
+      # Coverage Report
+      - name: Run Coverage
+        run: |
+          docker run --rm \
+            -e PYTHONPATH=/app \
+            sb-dict-dev:test \
+            pytest tests \
+            --cov=. \
+            --cov-report=term-missing
+
+      # Cleanup
+      - name: Cleanup Docker Image
+        if: always()
+        run: |
+          docker rmi sb-dict-dev:test || true

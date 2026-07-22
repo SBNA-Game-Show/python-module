@@ -8,18 +8,13 @@ class ExtractDataFromLearnSanskrit:
     """
 
     def __init__(self, data):
+        
+        if not data:
+            raise ValueError("DATA IS NOT PROVIDED TO CONVERT TO JSON")
+        self.data = self._parse_json(data)
+        
 
-        self.data = self.parse_json(data)
-        
-        self.english_title = self.extract_english_title()
-        self.actors = self.extract_actors()
-        self.moral = self.extract_moral()
-        self.english_version = self.extract_english_version_story()
-        self.sanskrit_version = self.extract_sanskrit_version_story()
-        self.sanskrit_title = self.extracting_sanskrit_version_story_title()
-        
-    
-    def parse_json(self,data):
+    def _parse_json(self,data):
         """Parsing the input json data"""
         try:
             if isinstance (data,(dict,list)):
@@ -32,30 +27,30 @@ class ExtractDataFromLearnSanskrit:
         
 
        
-    def extract_english_title(self):
+    def _extract_english_title(self):
         """Extracting English Title from fable"""
         title_data = self.data['data']['summary_head']
         return title_data[0]
     
-    def extract_actors(self):
+    def _extract_actors(self):
         """Extracting Actor Names"""
-        title = self.english_title
+        title = self._extract_english_title()
         title.replace(" ","")
         return title.split(", ")
     
 
-    def extract_moral(self):
+    def _extract_moral(self):
         title_data = self.data['data']['summary_head']
         story_moral = title_data[1]
         story_moral = story_moral.replace("(", "").replace(")", "")
         return story_moral
     
-    def extract_english_version_story(self):
+    def _extract_english_version_story(self):
         """Extracting english version story"""
         return self.data['data']['summary_text']
     
     
-    def extract_sanskrit_version_story(self):
+    def _extract_sanskrit_version_story(self):
         """Extracting Transliterd version"""
         sanskrit_version =[]
         sanskrit_texts = self.data["data"]["textsdeva"]
@@ -86,20 +81,21 @@ class ExtractDataFromLearnSanskrit:
         
         return sanskrit_version
     
-    def extracting_sanskrit_version_story_title(self):
-        return self.sanskrit_version[0]
+    def _extracting_sanskrit_version_story_title(self):
+        sanskrit_version = self._extract_sanskrit_version_story()
+        return sanskrit_version[0]
     
     
     def get_json_data(self):
         return {
             "title": {
-                "englishVersion": self.english_title,
-                "sanskritVersion": self.sanskrit_title
+                "englishVersion": self._extract_english_title(),
+                "sanskritVersion": self._extracting_sanskrit_version_story_title()
             },
-            "actors": self.actors,
-            "storyMoral": [self.moral],
-            "englishVersion": self.english_version,
-            "sanskritVersion": self.sanskrit_version
+            "actors": self._extract_actors(),
+            "storyMoral": [self._extract_moral()],
+            "englishVersion": self._extract_english_version_story(),
+            "sanskritVersion": self._extract_sanskrit_version_story()
         }
         
         
