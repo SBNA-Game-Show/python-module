@@ -1,29 +1,169 @@
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
 
-from repository.tokenized_data_repo import GetAllTokenizedStoriesFromMongoDB
+from repository.tokenized_data_repo import (
+    GetTokenizedStoriesByCategoryFromMongoDB
+)
 
 
-@patch("repository.tokenized_data_repo.connect_db")
-def test_get_all_stories_success(mock_connect_db):
+class TestGetTokenizedStoriesByCategoryFromMongoDB:
 
-    mock_collection = MagicMock()
-    mock_collection.find.return_value = [
-        {
-            "_id": "1",
-            "title": "Rabbit Story"
-        }
-    ]
 
-    mock_db = MagicMock()
-    mock_db.__getitem__.return_value = mock_collection
+    def test_get_stories_by_category_success(self):
 
-    mock_connect_db.return_value = mock_db
+        repo = GetTokenizedStoriesByCategoryFromMongoDB(
+            "Panchatantra"
+        )
 
-    repo = GetAllTokenizedStoriesFromMongoDB()
+        repo.collection = MagicMock()
 
-    result = repo.get_all()
+        repo.collection.find.return_value = [
+            {
+                "_id": "1",
+                "title": "Rabbit Story",
+                "category": "Panchatantra"
+            },
+            {
+                "_id": "2",
+                "title": "Lion Story",
+                "category": "Panchatantra"
+            }
+        ]
 
-    assert result["success"] is True
-    assert result["count"] == 1
-    assert len(result["data"]) == 1
-    assert result["data"][0]["title"] == "Rabbit Story"
+
+        result = repo.get_stories()
+
+
+        assert result["success"] is True
+
+        assert result["count"] == 2
+
+        assert len(result["data"]) == 2
+
+        assert result["data"][0]["title"] == (
+            "Rabbit Story"
+        )
+
+        assert result["data"][1]["title"] == (
+            "Lion Story"
+        )
+
+
+        repo.collection.find.assert_called_once_with(
+            {
+                "category": "Panchatantra"
+            }
+        )
+
+
+
+    def test_get_stories_by_category_single_result(self):
+
+        repo = GetTokenizedStoriesByCategoryFromMongoDB(
+            "Aesop"
+        )
+
+        repo.collection = MagicMock()
+
+        repo.collection.find.return_value = [
+            {
+                "_id": "10",
+                "title": "Fox Story",
+                "category": "Aesop"
+            }
+        ]
+
+
+        result = repo.get_stories()
+
+
+        assert result["success"] is True
+
+        assert result["count"] == 1
+
+        assert result["data"][0]["category"] == (
+            "Aesop"
+        )
+
+
+
+    def test_get_stories_by_category_not_found(self):
+
+        repo = GetTokenizedStoriesByCategoryFromMongoDB(
+            "Unknown"
+        )
+
+        repo.collection = MagicMock()
+
+        repo.collection.find.return_value = []
+
+
+        result = repo.get_stories()
+
+
+        assert result["success"] is False
+
+        assert result["message"] == (
+            "No tokenized stories found for category 'Unknown'."
+        )
+
+
+        repo.collection.find.assert_called_once_with(
+            {
+                "category": "Unknown"
+            }
+        )
+
+
+
+    def test_get_stories_empty_category(self):
+
+        repo = GetTokenizedStoriesByCategoryFromMongoDB(
+            ""
+        )
+
+        repo.collection = MagicMock()
+
+        repo.collection.find.return_value = []
+
+
+        result = repo.get_stories()
+
+
+        assert result["success"] is False
+
+        assert (
+            "No tokenized stories found"
+            in result["message"]
+        )
+
+
+
+    def test_get_stories_database_returns_multiple_documents(self):
+
+        repo = GetTokenizedStoriesByCategoryFromMongoDB(
+            "Hitopadesha"
+        )
+
+        repo.collection = MagicMock()
+
+        stories = [
+            {
+                "_id": str(i),
+                "title": f"Story {i}",
+                "category": "Hitopadesha"
+            }
+            for i in range(5)
+        ]
+
+
+        repo.collection.find.return_value = stories
+
+
+        result = repo.get_stories()
+
+
+        assert result["success"] is True
+
+        assert result["count"] == 5
+
+        assert len(result["data"]) == 5
