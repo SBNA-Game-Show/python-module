@@ -48,14 +48,12 @@ jobs:
           pytest tests -v
 
       # Coverage Report
-      - name: Run Coverage
+      - name: Run Coverage Tests
         run: |
           docker run --rm \
-            -e PYTHONPATH=/app \
-            sb-dict-dev:test \
-            pytest tests \
-            --cov=. \
-            --cov-report=term-missing
+          -e PYTHONPATH=/app \
+          sb-dict-dev:test \
+          sh -c "pip install pytest-cov && pytest tests --cov=. --cov-report=term-missing"
 
       # Cleanup
       - name: Cleanup Docker Image
