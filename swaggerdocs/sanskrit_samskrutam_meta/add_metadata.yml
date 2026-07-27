@@ -7,10 +7,10 @@ summary: Add Complete Meta Data from sanskrit.samskrutam.com
 
 description: >
   ⚠️ This endpoint retrieves all required fable information from sanskrit.samskrutam.com categories,
-  converts it into the fable category, and stores it in MongoDB.
+  converts it into the fable category, and stores it in MongoDB. **NOTE: CURRENTLY LOCKED VIA API DOCUMENTATION**
 
-# security:
-#   - Bearer: []
+security:
+  - Bearer: []
 
 parameters:
   - name: workflow_example
